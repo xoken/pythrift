@@ -16,167 +16,17 @@ from thrift.transport import TTransport
 all_structs = []
 
 
-class Priority(object):
-    HIGH = 1
-    MEDIUM = 2
-    LOW = 3
-
-    _VALUES_TO_NAMES = {
-        1: "HIGH",
-        2: "MEDIUM",
-        3: "LOW",
-    }
-
-    _NAMES_TO_VALUES = {
-        "HIGH": 1,
-        "MEDIUM": 2,
-        "LOW": 3,
-    }
-
-
-class Operation(object):
-    SET_NODE_CAPABILITY = 1
-    GET_BLOCK_HEADERS = 2
-    GET_ESTIMATE_FEE = 3
-    SUBSCRIBE_NEW_HEADERS = 4
-    GET_UNCONFIRMED_TX = 5
-    GET_UTXOS = 6
-    SUBSCRIBE_SCRIPT_HASH = 7
-    UNSUBSCRIBE_SCRIPT_HASH = 8
-    BROADCAST_TX = 9
-    GET_RAW_TX_FROM_HASH = 10
-    GET_TX_MERKLE_PATH = 11
-
-    _VALUES_TO_NAMES = {
-        1: "SET_NODE_CAPABILITY",
-        2: "GET_BLOCK_HEADERS",
-        3: "GET_ESTIMATE_FEE",
-        4: "SUBSCRIBE_NEW_HEADERS",
-        5: "GET_UNCONFIRMED_TX",
-        6: "GET_UTXOS",
-        7: "SUBSCRIBE_SCRIPT_HASH",
-        8: "UNSUBSCRIBE_SCRIPT_HASH",
-        9: "BROADCAST_TX",
-        10: "GET_RAW_TX_FROM_HASH",
-        11: "GET_TX_MERKLE_PATH",
-    }
-
-    _NAMES_TO_VALUES = {
-        "SET_NODE_CAPABILITY": 1,
-        "GET_BLOCK_HEADERS": 2,
-        "GET_ESTIMATE_FEE": 3,
-        "SUBSCRIBE_NEW_HEADERS": 4,
-        "GET_UNCONFIRMED_TX": 5,
-        "GET_UTXOS": 6,
-        "SUBSCRIBE_SCRIPT_HASH": 7,
-        "UNSUBSCRIBE_SCRIPT_HASH": 8,
-        "BROADCAST_TX": 9,
-        "GET_RAW_TX_FROM_HASH": 10,
-        "GET_TX_MERKLE_PATH": 11,
-    }
-
-
-class Message(object):
+class Failure(TException):
     """
     Attributes:
-     - count
-     - priority
-     - opcode
-     - payload
-
-    """
-
-
-    def __init__(self, count=0, priority=None, opcode=None, payload=None,):
-        self.count = count
-        self.priority = priority
-        self.opcode = opcode
-        self.payload = payload
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 1:
-                if ftype == TType.I32:
-                    self.count = iprot.readI32()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 2:
-                if ftype == TType.I32:
-                    self.priority = iprot.readI32()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 3:
-                if ftype == TType.I32:
-                    self.opcode = iprot.readI32()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 4:
-                if ftype == TType.STRING:
-                    self.payload = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('Message')
-        if self.count is not None:
-            oprot.writeFieldBegin('count', TType.I32, 1)
-            oprot.writeI32(self.count)
-            oprot.writeFieldEnd()
-        if self.priority is not None:
-            oprot.writeFieldBegin('priority', TType.I32, 2)
-            oprot.writeI32(self.priority)
-            oprot.writeFieldEnd()
-        if self.opcode is not None:
-            oprot.writeFieldBegin('opcode', TType.I32, 3)
-            oprot.writeI32(self.opcode)
-            oprot.writeFieldEnd()
-        if self.payload is not None:
-            oprot.writeFieldBegin('payload', TType.STRING, 4)
-            oprot.writeString(self.payload.encode('utf-8') if sys.version_info[0] == 2 else self.payload)
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-
-
-class InvalidOperation(TException):
-    """
-    Attributes:
-     - failedOpcode
+     - code
      - reason
 
     """
 
 
-    def __init__(self, failedOpcode=None, reason=None,):
-        self.failedOpcode = failedOpcode
+    def __init__(self, code=None, reason=None,):
+        self.code = code
         self.reason = reason
 
     def read(self, iprot):
@@ -190,7 +40,7 @@ class InvalidOperation(TException):
                 break
             if fid == 1:
                 if ftype == TType.I32:
-                    self.failedOpcode = iprot.readI32()
+                    self.code = iprot.readI32()
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
@@ -207,10 +57,10 @@ class InvalidOperation(TException):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('InvalidOperation')
-        if self.failedOpcode is not None:
-            oprot.writeFieldBegin('failedOpcode', TType.I32, 1)
-            oprot.writeI32(self.failedOpcode)
+        oprot.writeStructBegin('Failure')
+        if self.code is not None:
+            oprot.writeFieldBegin('code', TType.I32, 1)
+            oprot.writeI32(self.code)
             oprot.writeFieldEnd()
         if self.reason is not None:
             oprot.writeFieldBegin('reason', TType.STRING, 2)
@@ -235,18 +85,10 @@ class InvalidOperation(TException):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(Message)
-Message.thrift_spec = (
+all_structs.append(Failure)
+Failure.thrift_spec = (
     None,  # 0
-    (1, TType.I32, 'count', None, 0, ),  # 1
-    (2, TType.I32, 'priority', None, None, ),  # 2
-    (3, TType.I32, 'opcode', None, None, ),  # 3
-    (4, TType.STRING, 'payload', 'UTF8', None, ),  # 4
-)
-all_structs.append(InvalidOperation)
-InvalidOperation.thrift_spec = (
-    None,  # 0
-    (1, TType.I32, 'failedOpcode', None, None, ),  # 1
+    (1, TType.I32, 'code', None, None, ),  # 1
     (2, TType.STRING, 'reason', 'UTF8', None, ),  # 2
 )
 fix_spec(all_structs)

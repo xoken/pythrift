@@ -22,11 +22,11 @@ class Iface(object):
     def ping(self):
         pass
 
-    def sendRequest(self, logid, msg):
+    def sendRequest(self, logid, jsonReq):
         """
         Parameters:
          - logid
-         - msg
+         - jsonReq
 
         """
         pass
@@ -65,21 +65,21 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "ping failed: unknown result")
 
-    def sendRequest(self, logid, msg):
+    def sendRequest(self, logid, jsonReq):
         """
         Parameters:
          - logid
-         - msg
+         - jsonReq
 
         """
-        self.send_sendRequest(logid, msg)
+        self.send_sendRequest(logid, jsonReq)
         return self.recv_sendRequest()
 
-    def send_sendRequest(self, logid, msg):
+    def send_sendRequest(self, logid, jsonReq):
         self._oprot.writeMessageBegin('sendRequest', TMessageType.CALL, self._seqid)
         args = sendRequest_args()
         args.logid = logid
-        args.msg = msg
+        args.jsonReq = jsonReq
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -97,8 +97,8 @@ class Client(Iface):
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        if result.ouch is not None:
-            raise result.ouch
+        if result.fail is not None:
+            raise result.fail
         raise TApplicationException(TApplicationException.MISSING_RESULT, "sendRequest failed: unknown result")
 
 
@@ -153,13 +153,13 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = sendRequest_result()
         try:
-            result.success = self._handler.sendRequest(args.logid, args.msg)
+            result.success = self._handler.sendRequest(args.logid, args.jsonReq)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
-        except InvalidOperation as ouch:
+        except Failure as fail:
             msg_type = TMessageType.REPLY
-            result.ouch = ouch
+            result.fail = fail
         except TApplicationException as ex:
             logging.exception('TApplication exception in handler')
             msg_type = TMessageType.EXCEPTION
@@ -284,14 +284,14 @@ class sendRequest_args(object):
     """
     Attributes:
      - logid
-     - msg
+     - jsonReq
 
     """
 
 
-    def __init__(self, logid=None, msg=None,):
+    def __init__(self, logid=None, jsonReq=None,):
         self.logid = logid
-        self.msg = msg
+        self.jsonReq = jsonReq
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -308,9 +308,8 @@ class sendRequest_args(object):
                 else:
                     iprot.skip(ftype)
             elif fid == 2:
-                if ftype == TType.STRUCT:
-                    self.msg = Message()
-                    self.msg.read(iprot)
+                if ftype == TType.STRING:
+                    self.jsonReq = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -327,9 +326,9 @@ class sendRequest_args(object):
             oprot.writeFieldBegin('logid', TType.I32, 1)
             oprot.writeI32(self.logid)
             oprot.writeFieldEnd()
-        if self.msg is not None:
-            oprot.writeFieldBegin('msg', TType.STRUCT, 2)
-            self.msg.write(oprot)
+        if self.jsonReq is not None:
+            oprot.writeFieldBegin('jsonReq', TType.STRING, 2)
+            oprot.writeString(self.jsonReq.encode('utf-8') if sys.version_info[0] == 2 else self.jsonReq)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -351,7 +350,7 @@ all_structs.append(sendRequest_args)
 sendRequest_args.thrift_spec = (
     None,  # 0
     (1, TType.I32, 'logid', None, None, ),  # 1
-    (2, TType.STRUCT, 'msg', [Message, None], None, ),  # 2
+    (2, TType.STRING, 'jsonReq', 'UTF8', None, ),  # 2
 )
 
 
@@ -359,14 +358,14 @@ class sendRequest_result(object):
     """
     Attributes:
      - success
-     - ouch
+     - fail
 
     """
 
 
-    def __init__(self, success=None, ouch=None,):
+    def __init__(self, success=None, fail=None,):
         self.success = success
-        self.ouch = ouch
+        self.fail = fail
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -384,8 +383,8 @@ class sendRequest_result(object):
                     iprot.skip(ftype)
             elif fid == 1:
                 if ftype == TType.STRUCT:
-                    self.ouch = InvalidOperation()
-                    self.ouch.read(iprot)
+                    self.fail = Failure()
+                    self.fail.read(iprot)
                 else:
                     iprot.skip(ftype)
             else:
@@ -402,9 +401,9 @@ class sendRequest_result(object):
             oprot.writeFieldBegin('success', TType.STRING, 0)
             oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
             oprot.writeFieldEnd()
-        if self.ouch is not None:
-            oprot.writeFieldBegin('ouch', TType.STRUCT, 1)
-            self.ouch.write(oprot)
+        if self.fail is not None:
+            oprot.writeFieldBegin('fail', TType.STRUCT, 1)
+            self.fail.write(oprot)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -425,7 +424,7 @@ class sendRequest_result(object):
 all_structs.append(sendRequest_result)
 sendRequest_result.thrift_spec = (
     (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
-    (1, TType.STRUCT, 'ouch', [InvalidOperation, None], None, ),  # 1
+    (1, TType.STRUCT, 'fail', [Failure, None], None, ),  # 1
 )
 fix_spec(all_structs)
 del all_structs

@@ -32,12 +32,7 @@ def main():
     print('ping status: ' + str(retval))
 
 
-    msg = Message()
-
-    msg.opcode = Operation.SET_NODE_CAPABILITY
-    msg.priority = Priority.MEDIUM
-    msg.count = 1
-    msg.payload = 'wonderful'
+    msg = 'wonderful'
 
     resp = client.sendRequest(1, msg)
     print('%s' % resp)
@@ -49,10 +44,7 @@ def main():
     #except InvalidOperation as e:
         #print('InvalidOperation: %r' % e)
 
-    msg.opcode = Operation.GET_BLOCK_HEADERS
-    msg.priority = Priority.HIGH
-    msg.count = 2
-    msg.payload = 'universe'
+    msg = ' hello'
 
     resp = client.sendRequest(1, msg)
     print('%s' % resp)
