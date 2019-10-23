@@ -18,7 +18,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-
+import json
 import glob
 import sys
 sys.path.append('gen-py')
@@ -49,6 +49,9 @@ class AriviNetworkServiceHandler:
 
     def sendRequest(self, logid, msg):
         print('sendRequest(%d, %s)' % (logid, msg))
+        xx = json.loads(msg)
+        print (xx)
+        print("---")
         
         val = "dummy-placeholder-response"
         

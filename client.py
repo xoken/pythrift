@@ -11,10 +11,10 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
 
-def main():
+def client(port, cmd):
     # Make socket
     print ("Starting...")
-    transport = TSocket.TSocket('localhost', 9090)
+    transport = TSocket.TSocket('localhost', port)
 
     # Buffering is critical. Raw sockets are very slow
     transport = TTransport.TBufferedTransport(transport)
@@ -31,28 +31,43 @@ def main():
     retval = client.ping()
     print('ping status: ' + str(retval))
 
+    if cmd == "rpc":
+        msg = '{"jsonrpc": "2.0", "method": "get_block_headers", "params": {"start_height": 20000, "count": 10}, "id": 1}'
+        print( '%s' % msg)
+        resp = client.sendRequest(1, msg)
+        print('%s' % resp)
+        
+        #try:
+            #quotient = client.calculate(1, msg)
+            #print('Whoa? You know how to divide by zero?')
+            #print('FYI the answer is %d' % quotient)
+        #except InvalidOperation as e:
+            #print('InvalidOperation: %r' % e)
 
-    msg = 'wonderful'
+        msg = '{"jsonrpc": "2.0", "method": "get_block_header", "params": {"height": -1}, "id": 1}'
 
-    resp = client.sendRequest(1, msg)
-    print('%s' % resp)
+        resp = client.sendRequest(1, msg)
+        print('%s' % resp)
+
+    elif cmd == "sub":
+        topic = 'HELLO'
+
+        resp = client.subscribe( topic)
+        print('%s' % resp)
     
-    #try:
-        #quotient = client.calculate(1, msg)
-        #print('Whoa? You know how to divide by zero?')
-        #print('FYI the answer is %d' % quotient)
-    #except InvalidOperation as e:
-        #print('InvalidOperation: %r' % e)
+    elif cmd == "pub":
+        topic = 'HELLO'
 
-    msg = ' hello'
-
-    resp = client.sendRequest(1, msg)
-    print('%s' % resp)
-
-    #log = client.getStruct(1)
-    #print('Check log: %s' % log.value)
-
+        resp = client.publish( topic, "hello-world-message")
+        print('%s' % resp)
+        
     #Close!
     transport.close()
 
-main()
+
+
+if len(sys.argv) < 3:
+        print ("Provide Thrift Server (on localhost) port to connect.")
+        exit(0)
+        
+client(sys.argv[1], sys.argv[2])

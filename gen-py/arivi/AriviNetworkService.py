@@ -31,6 +31,32 @@ class Iface(object):
         """
         pass
 
+    def subscribe(self, topic):
+        """
+        Parameters:
+         - topic
+
+        """
+        pass
+
+    def publish(self, topic, message):
+        """
+        Parameters:
+         - topic
+         - message
+
+        """
+        pass
+
+    def notify(self, topic, message):
+        """
+        Parameters:
+         - topic
+         - message
+
+        """
+        pass
+
 
 class Client(Iface):
     def __init__(self, iprot, oprot=None):
@@ -101,6 +127,112 @@ class Client(Iface):
             raise result.fail
         raise TApplicationException(TApplicationException.MISSING_RESULT, "sendRequest failed: unknown result")
 
+    def subscribe(self, topic):
+        """
+        Parameters:
+         - topic
+
+        """
+        self.send_subscribe(topic)
+        return self.recv_subscribe()
+
+    def send_subscribe(self, topic):
+        self._oprot.writeMessageBegin('subscribe', TMessageType.CALL, self._seqid)
+        args = subscribe_args()
+        args.topic = topic
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_subscribe(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = subscribe_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        if result.fail is not None:
+            raise result.fail
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "subscribe failed: unknown result")
+
+    def publish(self, topic, message):
+        """
+        Parameters:
+         - topic
+         - message
+
+        """
+        self.send_publish(topic, message)
+        return self.recv_publish()
+
+    def send_publish(self, topic, message):
+        self._oprot.writeMessageBegin('publish', TMessageType.CALL, self._seqid)
+        args = publish_args()
+        args.topic = topic
+        args.message = message
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_publish(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = publish_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        if result.fail is not None:
+            raise result.fail
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "publish failed: unknown result")
+
+    def notify(self, topic, message):
+        """
+        Parameters:
+         - topic
+         - message
+
+        """
+        self.send_notify(topic, message)
+        return self.recv_notify()
+
+    def send_notify(self, topic, message):
+        self._oprot.writeMessageBegin('notify', TMessageType.CALL, self._seqid)
+        args = notify_args()
+        args.topic = topic
+        args.message = message
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_notify(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = notify_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        if result.fail is not None:
+            raise result.fail
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "notify failed: unknown result")
+
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
@@ -108,6 +240,9 @@ class Processor(Iface, TProcessor):
         self._processMap = {}
         self._processMap["ping"] = Processor.process_ping
         self._processMap["sendRequest"] = Processor.process_sendRequest
+        self._processMap["subscribe"] = Processor.process_subscribe
+        self._processMap["publish"] = Processor.process_publish
+        self._processMap["notify"] = Processor.process_notify
 
     def process(self, iprot, oprot):
         (name, type, seqid) = iprot.readMessageBegin()
@@ -169,6 +304,84 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("sendRequest", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_subscribe(self, seqid, iprot, oprot):
+        args = subscribe_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = subscribe_result()
+        try:
+            result.success = self._handler.subscribe(args.topic)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except Failure as fail:
+            msg_type = TMessageType.REPLY
+            result.fail = fail
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("subscribe", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_publish(self, seqid, iprot, oprot):
+        args = publish_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = publish_result()
+        try:
+            result.success = self._handler.publish(args.topic, args.message)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except Failure as fail:
+            msg_type = TMessageType.REPLY
+            result.fail = fail
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("publish", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_notify(self, seqid, iprot, oprot):
+        args = notify_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = notify_result()
+        try:
+            result.success = self._handler.notify(args.topic, args.message)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except Failure as fail:
+            msg_type = TMessageType.REPLY
+            result.fail = fail
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("notify", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -423,6 +636,438 @@ class sendRequest_result(object):
         return not (self == other)
 all_structs.append(sendRequest_result)
 sendRequest_result.thrift_spec = (
+    (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    (1, TType.STRUCT, 'fail', [Failure, None], None, ),  # 1
+)
+
+
+class subscribe_args(object):
+    """
+    Attributes:
+     - topic
+
+    """
+
+
+    def __init__(self, topic=None,):
+        self.topic = topic
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.topic = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('subscribe_args')
+        if self.topic is not None:
+            oprot.writeFieldBegin('topic', TType.STRING, 1)
+            oprot.writeString(self.topic.encode('utf-8') if sys.version_info[0] == 2 else self.topic)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(subscribe_args)
+subscribe_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'topic', 'UTF8', None, ),  # 1
+)
+
+
+class subscribe_result(object):
+    """
+    Attributes:
+     - success
+     - fail
+
+    """
+
+
+    def __init__(self, success=None, fail=None,):
+        self.success = success
+        self.fail = fail
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 1:
+                if ftype == TType.STRUCT:
+                    self.fail = Failure()
+                    self.fail.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('subscribe_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldEnd()
+        if self.fail is not None:
+            oprot.writeFieldBegin('fail', TType.STRUCT, 1)
+            self.fail.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(subscribe_result)
+subscribe_result.thrift_spec = (
+    (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    (1, TType.STRUCT, 'fail', [Failure, None], None, ),  # 1
+)
+
+
+class publish_args(object):
+    """
+    Attributes:
+     - topic
+     - message
+
+    """
+
+
+    def __init__(self, topic=None, message=None,):
+        self.topic = topic
+        self.message = message
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.topic = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRING:
+                    self.message = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('publish_args')
+        if self.topic is not None:
+            oprot.writeFieldBegin('topic', TType.STRING, 1)
+            oprot.writeString(self.topic.encode('utf-8') if sys.version_info[0] == 2 else self.topic)
+            oprot.writeFieldEnd()
+        if self.message is not None:
+            oprot.writeFieldBegin('message', TType.STRING, 2)
+            oprot.writeString(self.message.encode('utf-8') if sys.version_info[0] == 2 else self.message)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(publish_args)
+publish_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'topic', 'UTF8', None, ),  # 1
+    (2, TType.STRING, 'message', 'UTF8', None, ),  # 2
+)
+
+
+class publish_result(object):
+    """
+    Attributes:
+     - success
+     - fail
+
+    """
+
+
+    def __init__(self, success=None, fail=None,):
+        self.success = success
+        self.fail = fail
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 1:
+                if ftype == TType.STRUCT:
+                    self.fail = Failure()
+                    self.fail.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('publish_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldEnd()
+        if self.fail is not None:
+            oprot.writeFieldBegin('fail', TType.STRUCT, 1)
+            self.fail.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(publish_result)
+publish_result.thrift_spec = (
+    (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    (1, TType.STRUCT, 'fail', [Failure, None], None, ),  # 1
+)
+
+
+class notify_args(object):
+    """
+    Attributes:
+     - topic
+     - message
+
+    """
+
+
+    def __init__(self, topic=None, message=None,):
+        self.topic = topic
+        self.message = message
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.topic = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRING:
+                    self.message = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('notify_args')
+        if self.topic is not None:
+            oprot.writeFieldBegin('topic', TType.STRING, 1)
+            oprot.writeString(self.topic.encode('utf-8') if sys.version_info[0] == 2 else self.topic)
+            oprot.writeFieldEnd()
+        if self.message is not None:
+            oprot.writeFieldBegin('message', TType.STRING, 2)
+            oprot.writeString(self.message.encode('utf-8') if sys.version_info[0] == 2 else self.message)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(notify_args)
+notify_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'topic', 'UTF8', None, ),  # 1
+    (2, TType.STRING, 'message', 'UTF8', None, ),  # 2
+)
+
+
+class notify_result(object):
+    """
+    Attributes:
+     - success
+     - fail
+
+    """
+
+
+    def __init__(self, success=None, fail=None,):
+        self.success = success
+        self.fail = fail
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 1:
+                if ftype == TType.STRUCT:
+                    self.fail = Failure()
+                    self.fail.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('notify_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldEnd()
+        if self.fail is not None:
+            oprot.writeFieldBegin('fail', TType.STRUCT, 1)
+            self.fail.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(notify_result)
+notify_result.thrift_spec = (
     (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
     (1, TType.STRUCT, 'fail', [Failure, None], None, ),  # 1
 )
