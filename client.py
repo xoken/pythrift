@@ -29,7 +29,9 @@ def sendRequest(s, request):
     full = lenPrefix + payload
     s.sendall(lenPrefix)
     s.sendall(payload)
-    data = s.recv(1024)
+    prefix = s.recv(2)
+    leng = int.from_bytes(prefix, byteorder='big')
+    data = s.recv(leng)
     print('Received', data.decode("utf-8") )
     
     

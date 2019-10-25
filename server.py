@@ -11,7 +11,7 @@ def getResponse(data):
     msgid = obj['msgid']
     body = "wue5279wusle2oesliru2"
     msg = '{"msgid": '+ str(msgid) + ', "mtype": "RPC_RESP", "params": { "encResp": "'+ body + '"} }'
-    print (msgid, msg)
+    #print (msgid, msg)
     return msg
     
     
@@ -26,7 +26,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         with conn:
             print('Connected by', addr)
             while True:
-                data = conn.recv(1024)
+                prefix = conn.recv(2)
+                leng = int.from_bytes(prefix, byteorder='big')
+                data = conn.recv(leng)
                 print (data)
                 if not data:
                     break
