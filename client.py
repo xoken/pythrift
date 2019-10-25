@@ -2,27 +2,35 @@ import sys
 import glob
 import time
 import socket
-from json import dumps, loads
+import json 
 
 #global 
 msgid = 1
 
 def sendRequest(s, request):
     global msgid
-    msg = '{"msgid": '+ str(msgid) + ', "mtype": "RPC", "params": { "encReq": "'+ request + '"} }'
+    req =  {} 
+    #'{"msgid": '+ str(msgid) + ', "mtype": "RPC_REQ", "params": { "encReq": "'+ request + '"} }'
+    
+    req['msgid'] = msgid
+    req['mtype'] = 'RPC_REQ'
+    params ={}
+    params['encReq'] = request
+    req['params'] = params
+    msg = json.dumps(req)
+    print(msg)
     msgid = msgid + 1
     
     length = len(msg)
-    print (length)
     lenPrefix = length.to_bytes(2, 'big')
-    print (lenPrefix)
+    print (length, lenPrefix)
     
     payload = str.encode(msg)
     full = lenPrefix + payload
     s.sendall(lenPrefix)
     s.sendall(payload)
     data = s.recv(1024)
-    print('Received', repr(data))
+    print('Received', data.decode("utf-8") )
     
     
 def client(port, cmd):
@@ -98,4 +106,4 @@ if len(sys.argv) < 3:
 sock = client(sys.argv[1], sys.argv[2])
 while True:
     sendRequest (sock , "asdlfwoeurosdjhfljwslfjwelrsdjfowieuosdkjf")
-    time.sleep(5)
+    time.sleep(3)
