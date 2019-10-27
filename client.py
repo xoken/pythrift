@@ -10,7 +10,6 @@ msgid = 1
 def sendRequest(s, request):
     global msgid
     req =  {} 
-    #'{"msgid": '+ str(msgid) + ', "mtype": "RPC_REQ", "params": { "encReq": "'+ request + '"} }'
     
     req['msgid'] = msgid
     req['mtype'] = 'RPC_REQ'
@@ -34,8 +33,65 @@ def sendRequest(s, request):
     data = s.recv(leng)
     print('Received', data.decode("utf-8") )
     
+
+def subscribe(s, topic):
+    global msgid
+    req =  {} 
+
     
-def client(port, cmd):
+    req['msgid'] = msgid
+    req['mtype'] = 'SUB_REQ'
+    params ={}
+    params['subject'] = topic
+    req['params'] = params
+    msg = json.dumps(req)
+    print(msg)
+    msgid = msgid + 1
+    
+    length = len(msg)
+    lenPrefix = length.to_bytes(2, 'big')
+    print (length, lenPrefix)
+    
+    payload = str.encode(msg)
+    full = lenPrefix + payload
+    s.sendall(lenPrefix)
+    s.sendall(payload)
+    prefix = s.recv(2)
+    leng = int.from_bytes(prefix, byteorder='big')
+    data = s.recv(leng)
+    print('Received', data.decode("utf-8") )
+
+
+def publish(s, topic, body):
+    global msgid
+    req =  {} 
+
+    
+    req['msgid'] = msgid
+    req['mtype'] = 'PUB_REQ'
+    params ={}
+    params['subject'] = topic
+    params['body'] = body
+    req['params'] = params
+    msg = json.dumps(req)
+    print(msg)
+    msgid = msgid + 1
+    
+    length = len(msg)
+    lenPrefix = length.to_bytes(2, 'big')
+    print (length, lenPrefix)
+    
+    payload = str.encode(msg)
+    full = lenPrefix + payload
+    s.sendall(lenPrefix)
+    s.sendall(payload)
+    prefix = s.recv(2)
+    leng = int.from_bytes(prefix, byteorder='big')
+    data = s.recv(leng)
+    print('Received', data.decode("utf-8") )
+    
+    
+def client(port):
     # Make socket
     print ("Starting...")
     #transport = TSocket.TSocket('localhost', port)
@@ -105,7 +161,17 @@ if len(sys.argv) < 3:
         print ("Provide Server (on localhost) port to connect.")
         exit(0)
         
-sock = client(sys.argv[1], sys.argv[2])
+sock = client(sys.argv[1])
+cmd =  sys.argv[2]
 while True:
-    sendRequest (sock , "asdlfwoeurosdjhfljwslfjwelrsdjfowieuosdkjf")
-    time.sleep(3)
+    if cmd == "rpc":
+        sendRequest (sock , "asdlfwoeurosdjhfljwslfjwelrsdjfowieuosdkjf")
+        
+    elif cmd == "sub":
+        subscribe (sock, "get_block_header")
+
+    elif cmd == "pub":
+        publish (sock, "get_block_header", "<dummy body>")
+        
+    time.sleep(50)
+

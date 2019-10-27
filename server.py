@@ -9,8 +9,26 @@ def getResponse(data):
     sdata = data.decode("utf-8") 
     obj = json.loads(sdata)
     msgid = obj['msgid']
-    body = "wue5279wusle2oesliru2"
-    msg = '{"msgid": '+ str(msgid) + ', "mtype": "RPC_RESP", "params": { "encResp": "'+ body + '"} }'
+    mtype = obj['mtype']
+    
+    if mtype == "RPC_REQ":
+        req['msgid'] = msgid
+        req['mtype'] = 'RPC_RESP'
+        params ={}
+        params['encResp'] = "wue5279wusle2oesliru2"
+        req['params'] = params
+        msg = json.dumps(req)
+        
+    elif mtype == "PUB_REQ":
+        topic = obj['subject']
+        req['msgid'] = msgid
+        req['mtype'] = 'PUB_RESP'
+        params ={}
+        params['subject'] = topic
+        params['status'] = "ACK"
+        req['params'] = params
+        msg = json.dumps(req)
+    
     #print (msgid, msg)
     return msg
     
