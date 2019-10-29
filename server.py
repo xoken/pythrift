@@ -10,24 +10,26 @@ def getResponse(data):
     obj = json.loads(sdata)
     msgid = obj['msgid']
     mtype = obj['mtype']
+    recvparams = obj['params']
+    resp = {}
     
     if mtype == "RPC_REQ":
-        req['msgid'] = msgid
-        req['mtype'] = 'RPC_RESP'
+        resp['msgid'] = msgid
+        resp['mtype'] = 'RPC_RESP'
         params ={}
         params['encResp'] = "wue5279wusle2oesliru2"
-        req['params'] = params
-        msg = json.dumps(req)
+        resp['params'] = params
+        msg = json.dumps(resp)
         
     elif mtype == "PUB_REQ":
-        topic = obj['subject']
-        req['msgid'] = msgid
-        req['mtype'] = 'PUB_RESP'
+        topic = recvparams['subject']
+        resp['msgid'] = msgid
+        resp['mtype'] = 'PUB_RESP'
         params ={}
         params['subject'] = topic
         params['status'] = "ACK"
-        req['params'] = params
-        msg = json.dumps(req)
+        resp['params'] = params
+        msg = json.dumps(resp)
     
     #print (msgid, msg)
     return msg
