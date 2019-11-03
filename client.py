@@ -3,7 +3,8 @@ import glob
 import time
 import socket
 import json 
-
+import base64
+import zlib
 #global 
 msgid = 1
 
@@ -30,8 +31,19 @@ def sendRequest(s, request):
     s.sendall(payload)
     prefix = s.recv(2)
     leng = int.from_bytes(prefix, byteorder='big')
-    data = s.recv(leng)
-    print('Received', data.decode("utf-8") )
+    raw = s.recv(leng)
+    data = raw.decode("utf-8")
+    print('Received', data )
+    resp = json.loads(data)
+    body = resp['params']['encResp'] 
+    if body == '__EXCEPTION__NO_PEERS':
+        print("No peers yet. Will retry.")
+    else:
+        print ("Body: ", body)
+        jsp = zlib.decompress(base64.b64decode(body), 16 + zlib.MAX_WBITS).decode('utf-8')
+        print ("Decoded Payload: ", jsp)
+    
+
     
 
 def subscribe(s, topic):
