@@ -15,7 +15,11 @@ def sendRequest(s, request):
     req['msgid'] = msgid
     req['mtype'] = 'RPC_REQ'
     params ={}
-    params['encReq'] = request
+    gzip_compress = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
+    
+    gzx = gzip_compress.compress(request.encode('utf-8')) + gzip_compress.flush()
+    params['encReq'] = base64.b64encode(gzx).decode('utf-8')
+ 
     req['params'] = params
     msg = json.dumps(req)
     print(msg)
@@ -177,7 +181,10 @@ sock = client(sys.argv[1])
 cmd =  sys.argv[2]
 while True:
     if cmd == "rpc":
-        sendRequest (sock , "asdlfwoeurosdjhfljwslfjwelrsdjfowieuosdkjf")
+        r1 = '{"method": "get_block_height", "height": 7000001235 }'
+        r2 = '{"method": "get_blocks_heights", "heights": [15000,15001,15002] }'
+        
+        sendRequest (sock , r1)
         
     elif cmd == "sub":
         subscribe (sock, "get_block_header")
@@ -185,5 +192,5 @@ while True:
     elif cmd == "pub":
         publish (sock, "get_block_header", "<dummy body>")
         
-    time.sleep(50)
+    time.sleep(10)
 
