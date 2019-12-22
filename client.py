@@ -2,67 +2,47 @@ import sys
 import glob
 import time
 import socket
-import json 
-import base64
-import zlib
-#global 
-msgid = 1
 
-def sendRequest(s, request):
-    global msgid
-    req =  {} 
-    
-    req['msgid'] = msgid
-    req['mtype'] = 'RPC_REQ'
-    params ={}
-    gzip_compress = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
-    
-    gzx = gzip_compress.compress(request.encode('utf-8')) + gzip_compress.flush()
-    params['encReq'] = base64.b64encode(gzx).decode('utf-8')
- 
-    req['params'] = params
-    msg = json.dumps(req)
-    print(msg)
-    msgid = msgid + 1
-    
-    length = len(msg)
+
+from cbor2 import dumps, loads, CBORTag
+
+#global 
+msgId = 1
+
+
+       
+          
+def sendRequest(s, payload):
+    length = len(payload)
     lenPrefix = length.to_bytes(2, 'big')
     print (length, lenPrefix)
     
-    payload = str.encode(msg)
     full = lenPrefix + payload
     s.sendall(lenPrefix)
     s.sendall(payload)
     prefix = s.recv(2)
     leng = int.from_bytes(prefix, byteorder='big')
     raw = s.recv(leng)
-    data = raw.decode("utf-8")
+    data = loads(raw)
     print('Received', data )
-    resp = json.loads(data)
-    body = resp['params']['encResp'] 
-    if body == '__EXCEPTION__NO_PEERS':
-        print("No peers yet. Will retry.")
-    else:
-        print ("Body: ", body)
-        jsp = zlib.decompress(base64.b64decode(body), 16 + zlib.MAX_WBITS).decode('utf-8')
-        print ("Decoded Payload: ", jsp)
+
     
 
     
 
 def subscribe(s, topic):
-    global msgid
+    global msgId
     req =  {} 
 
     
-    req['msgid'] = msgid
-    req['mtype'] = 'SUB_REQ'
-    params ={}
-    params['subject'] = topic
-    req['params'] = params
+    req['msgId'] = msgId
+    req['msgType'] = 'SUB_REQ'
+    payload ={}
+    payload['subject'] = topic
+    req['payload'] = payload
     msg = json.dumps(req)
     print(msg)
-    msgid = msgid + 1
+    msgId = msgId + 1
     
     length = len(msg)
     lenPrefix = length.to_bytes(2, 'big')
@@ -79,19 +59,19 @@ def subscribe(s, topic):
 
 
 def publish(s, topic, body):
-    global msgid
+    global msgId
     req =  {} 
 
     
-    req['msgid'] = msgid
-    req['mtype'] = 'PUB_REQ'
-    params ={}
-    params['subject'] = topic
-    params['body'] = body
-    req['params'] = params
+    req['msgId'] = msgId
+    req['msgType'] = 'PUB_REQ'
+    payload ={}
+    payload['subject'] = topic
+    payload['body'] = body
+    req['payload'] = payload
     msg = json.dumps(req)
     print(msg)
-    msgid = msgid + 1
+    msgId = msgId + 1
     
     length = len(msg)
     lenPrefix = length.to_bytes(2, 'big')
@@ -110,24 +90,6 @@ def publish(s, topic, body):
 def client(port):
     # Make socket
     print ("Starting...")
-    #transport = TSocket.TSocket('localhost', port)
-
-    #Buffering is critical. Raw sockets are very slow
-    #transport = TTransport.TBufferedTransport(transport)
-
-    #Wrap in a protocol
-    #protocol = TBinaryProtocol.TBinaryProtocol(transport)
-
-    #Create a client to use the protocol encoder
-    #client = AriviNetworkService.Client(protocol)
-
-    # Connect!
-    #transport.open()
-
-    #'{"msgid": 123, "mtype": "RPC", "encReq": "CiA8bnMwOlJlcG9ydCB4bWxuczpuczA9XCJodHRwOi"}'
-    #'{"msgid": 456, "mtype": "SUB", "subject": "hello"}'
-    #'{"msgid": 789, "mtype": "PUB", "subject": "hello" "body": "PD94bWwgdmVyc2lvbj1cIjEuMFwiIGVuY29kaW5n"}'
-    
     host = "127.0.0.1"
     
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -135,43 +97,8 @@ def client(port):
     return s
     
 
-    #retval = client.ping()
-    #print('ping status: ' + str(retval))
 
-    #if cmd == "rpc":
-        #msg = '{"jsonrpc": "2.0", "method": "get_block_headers", "params": {"start_height": 20000, "count": 10}, "id": 1}'
-        #print( '%s' % msg)
-        #resp = client.sendRequest(1, msg)
-        #print('%s' % resp)
-        
-        #try:
-            #quotient = client.calculate(1, msg)
-            #print('Whoa? You know how to divide by zero?')
-            #print('FYI the answer is %d' % quotient)
-        #except InvalidOperation as e:
-            #print('InvalidOperation: %r' % e)
-
-        #msg = '{"jsonrpc": "2.0", "method": "get_block_header", "params": {"height": -1}, "id": 1}'
-
-        #resp = client.sendRequest(1, msg)
-        #print('%s' % resp)
-
-    #elif cmd == "sub":
-        #topic = 'HELLO'
-
-        #resp = client.subscribe( topic)
-        #print('%s' % resp)
-    
-    #elif cmd == "pub":
-        #topic = 'HELLO'
-
-        #resp = client.publish( topic, "hello-world-message")
-        #print('%s' % resp)
-        
-    #Close!
-    #transport.close()
-
-
+               
 
 if len(sys.argv) < 3:
         print ("Provide Server (on localhost) port to connect.")
@@ -179,12 +106,16 @@ if len(sys.argv) < 3:
         
 sock = client(sys.argv[1])
 cmd =  sys.argv[2]
+
+
 while True:
     if cmd == "rpc":
-        r1 = '{"method": "get_block_height", "height": 7000001235 }'
-        r2 = '{"method": "get_blocks_heights", "heights": [15000,15001,15002] }'
+        x1 = dumps((0,1,"abc",[0,100]))
+        print (x1)
+        sendRequest (sock , x1)
         
-        sendRequest (sock , r1)
+        #sendRequest (sock , r2)
+        #sendRequest (sock , r3)
         
     elif cmd == "sub":
         subscribe (sock, "get_block_header")
