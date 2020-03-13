@@ -8,15 +8,29 @@ import threading
 from cryptos import *
 from cbor2 import dumps, loads, CBORTag
 import codecs
+import yaml
+import binascii 
 
-def _op_return_hex(op_return):
-    try:
-        hex_op_return = codecs.encode(op_return, 'hex')
-    except TypeError:
-        hex_op_return = codecs.encode(op_return.encode('utf-8'), 'hex')
-    print (len(op_return), hex_op_return.decode('utf-8'))
-    print ("6a0%x%s" % (len(op_return), hex_op_return.decode('utf-8')))
-    return "6a0%x%s" % (len(op_return), hex_op_return.decode('utf-8'))
+
+def frame_op_return(op_return):
+
+    if (int(len(op_return)) <= 75): #0x4b
+        fmtStr = "%02x"
+    elif (int(len(op_return)) < 255): #0x4c
+        fmtStr = "4c%02x"
+    elif (int(len(op_return)) < 65535): #0x4d
+        fmtStr = "4d%04x"
+    else:                              # 0x4e
+        fmtStr = "4e%08x"
+    
+    #OP_RETURN Allegory/AllPay
+    prefix = bytes.fromhex('006a0f416c6c65676f72792f416c6c506179') 
+    lens = fmtStr % int(len(op_return))
+    lenb =  bytes.fromhex(lens)   
+    fs = prefix + lenb + op_return 
+    print ("final" , fs)
+    return fs
+    
 
 def sendRequest(s, payload):
     length = len(payload)
@@ -89,10 +103,18 @@ while True:
     priv = sha256('allegory allpay test dummy seed')
     pub = c.privtopub(priv)
     addr = c.pubtoaddr(pub)
-    inputs = [{'output': '3be10a0aaff108766371fd4f4efeabc5b848c61d4aac60db6001464879f07508:0', 'value': 180000000}, {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 90000000}]
-    outs = [{'value': 269845600, 'address': '2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF'}, {'value': 100000, 'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
-    opreturn = "111"
-    outs += [{'script': _op_return_hex(opreturn), 'value': 0}]
+    inputs = [{'output': '6c828920ea3a968f0c3c4a8f14d70b696e0440d8e4e1d019cced1ba2cc63cd51:0', 'value': 1000000}, {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
+    outs = [{'value': 1000000, 'address': '2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF'}, {'value': 1000000, 'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
+    
+
+    allegory = 'hello'
+    
+    data = dumps(allegory)
+    ss = frame_op_return(data).hex()
+    
+    print ("hexlified " , str(ss))
+    op_return = [{'script': ss, 'value': 0}]
+    outs = op_return + outs
     tx = c.mktx(inputs,outs)
     print (tx)
     txs1 = c.sign(tx,0,priv)
@@ -100,7 +122,9 @@ while True:
     print (txs2)
     txser = serialize(txs2)
     print (txser)
-    x10 = dumps((0, 1, 'RELAY_TX', [(9, txser )]))
+    x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(txser) )]))
+    
+    #x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex('0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000'))]))
 
     
     #ins = [{'output': u'97f7c7d8ac85e40c255f8a763b6cd9a68f3a94d2e93e8bfa08f977b92e55465e:0', 'value': 50000, 'address': u'1CQLd3bhw4EzaURHbKCwM5YZbUQfA4ReY6'}, {'output': u'4cc806bb04f730c445c60b3e0f4f44b54769a1c196ca37d8d4002135e4abd171:1', 'value': 50000, 'address': u'1CQLd3bhw4EzaURHbKCwM5YZbUQfA4ReY6'}]
