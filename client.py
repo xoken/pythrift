@@ -104,10 +104,10 @@ while True:
     pub = c.privtopub(priv)
     addr = c.pubtoaddr(pub)
     inputs = [{'output': '6c828920ea3a968f0c3c4a8f14d70b696e0440d8e4e1d019cced1ba2cc63cd51:0', 'value': 1000000}, {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
-    outs = [{'value': 1000000, 'address': '2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF'}, {'value': 1000000, 'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
+    outs = [{'value': 1000000, 'address': '2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF'}, {'value': 500000, 'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}, {'value': 500000, 'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
     
 
-    allegory = 'hello'
+    allegory = (0, 1, [65,66,67], (0 , (0, (0,0) ),(0, (0,1),[]) ,[(0,(0,2),90)]))
     
     data = dumps(allegory)
     ss = frame_op_return(data).hex()
@@ -122,7 +122,30 @@ while True:
     print (txs2)
     txser = serialize(txs2)
     print (txser)
+    print (txhash(txser))
     x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(txser) )]))
+    
+    inputs = [{'output': '6c828920ea3a968f0c3c4a8f14d70b696e0440d8e4e1d019cced1ba2cc63cd51:0', 'value': 1000000}, {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
+    outs = [{'value': 1000000, 'address': '2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF'}, {'value': 1000000, 'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
+    
+
+    allegory = (0, 1, [56,57,58], (1 , (0, (0,0) ),(0, (0,1) ),[]))
+    
+    data = dumps(allegory)
+    ss = frame_op_return(data).hex()
+    
+    print ("hexlified " , str(ss))
+    op_return = [{'script': ss, 'value': 0}]
+    outs = op_return + outs
+    tx = c.mktx(inputs,outs)
+    print (tx)
+    txs1 = c.sign(tx,0,priv)
+    txs2 = c.sign(txs1,1,priv)
+    print (txs2)
+    txser = serialize(txs2)
+    print (txser)
+    print (txhash(txser))
+    x11 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(txser) )]))
     
     #x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex('0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000'))]))
 
