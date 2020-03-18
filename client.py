@@ -118,11 +118,11 @@ while True:
             {'value': 250000,
              'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
 
-    allegory = (0, 1, [65, 66, 67],
+    allegory = (0, 1, [],
                 (0, (0, 0),
-                 (0, (0, 1), []),
-                 [(0, (0, 2), [])],
-                 [(0, (0, (0, 3), []), 90), (0, (0, (0, 4), []), 91)]))
+                 (0, (0, 1), [(0, "XokenP2P", "someuri1")]),
+                 [(0, (0, 2), [(0, "XokenP2P", "someuri2")])],
+                 [(0, (0, (0, 3), [(0, "XokenP2P", "someuri3")]), 90), (1, (0, (0, 4), [(0, "XokenP2P", "someuri4")]), 91)]))
 
     data = dumps(allegory)
     ss = frame_op_return(data).hex()
@@ -143,16 +143,16 @@ while True:
     x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(txser))]))
 
     inputs = \
-        [{'output': (firstTxHash + ':2'), 'value': 1000000},
+        [{'output': (firstTxHash + ':3'), 'value': 1000000},
          {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
     outs = [{'value': 1000000,
              'address': '2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF'},
             {'value': 1000000,
              'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
 
-    allegory = (0, 1, [56, 57, 58],
+    allegory = (0, 1, [90],
                 (1, (0, 0),
-                 (0, (0, 1), []),
+                 (0, (0, 1), [(0, "XokenP2P", "someuri000")]),
                  [(0, "Allegory", "standard", (0, "XokenP2P", "uriuriuri"),
                    (0, "addrcommit1234", "utxocommit1234", "signature1234",  8123456))]))
 
