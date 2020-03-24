@@ -104,6 +104,9 @@ while True:
     priv = sha256('allegory allpay test dummy seed')
     pub = c.privtopub(priv)
     addr = c.pubtoaddr(pub)
+
+###############
+
     inputs = \
         [{'output': '6c828920ea3a968f0c3c4a8f14d70b696e0440d8e4e1d019cced1ba2cc63cd51:0', 'value': 1000000},
          {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
@@ -142,6 +145,8 @@ while True:
     firstTxHash = txhash(txser)
     x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(txser))]))
 
+###########
+
     inputs = \
         [{'output': (firstTxHash + ':3'), 'value': 1000000},
          {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
@@ -170,7 +175,50 @@ while True:
     txser = serialize(txs2)
     print(txser)
     print(txhash(txser))
+    secondTxHash = txhash(txser)
     x11 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(txser))]))
+
+############
+
+    inputs = \
+        [{'output': firstTxHash + ':4', 'value': 1000000},
+         {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
+    outs = [{'value': 1000000,
+             'address': '2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF'},
+            {'value': 200000,
+             'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'},
+            {'value': 200000,
+             'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'},
+            {'value': 200000,
+             'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'},
+            {'value': 200000,
+             'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
+
+    allegory = (0, 1, [91],
+                (0, (0, 0),
+                 (0, (0, 1), [(0, "XokenP2P", "someuri1")]),
+                 [(0, (0, 2), [(0, "XokenP2P", "someuri2")])],
+                 [(0, (0, (0, 3), [(0, "XokenP2P", "someuri3")]), 103), (1, (0, (0, 4), [(0, "XokenP2P", "someuri4")]), 104)]))
+
+    data = dumps(allegory)
+    ss = frame_op_return(data).hex()
+
+    print('hexlified ', str(ss))
+    op_return = [{'script': ss, 'value': 0}]
+    outs = op_return + outs
+    tx = c.mktx(inputs, outs)
+    print(tx)
+    txs1 = c.sign(tx, 0, priv)
+    txs2 = c.sign(txs1, 1, priv)
+    print(txs2)
+    txser = serialize(txs2)
+    print(txser)
+    print(txhash(txser))
+    # save it for later use
+    firstTxHash = txhash(txser)
+    x12 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(txser))]))
+    #
+    #
 
     # x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(''))]))
 
@@ -187,14 +235,16 @@ while True:
     # sendRequest(sock, x8)
     # sendRequest(sock, x9)
 
-    sendRequest(sock, x1)
-    recvResponse(sock)
-    sendRequest(sock, x10)
-    recvResponse(sock)
+    # sendRequest(sock, x1)
+    # recvResponse(sock)
+    # sendRequest(sock, x10)
+    # recvResponse(sock)
+    # print("***************************")
+    # sendRequest(sock, x11)
+    # recvResponse(sock)
     print("***************************")
-    sendRequest(sock, x11)
+    sendRequest(sock, x12)
     recvResponse(sock)
-
     # recvResponse(sock)
     # recvResponse(sock)
     # recvResponse(sock)
