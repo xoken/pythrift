@@ -36,6 +36,12 @@ def frame_op_return(op_return):
     return fs
 
 
+def processReqResp(s, payload):
+    sendRequest(s, payload)
+    print("\n-----------------------------------------")
+    recvResponse(s)
+    print("-----------------------------------------\n")
+
 def sendRequest(s, payload):
     length = len(payload)
     lenPrefix = length.to_bytes(2, 'big')
@@ -81,12 +87,12 @@ while True:
                                             ])]))
 
     x4 = dumps((0, 1, 'TXID->TX', [(4,
-                                    '7d3eb236b526bd681b7fc499d657d237b4d3bc21ef25b37fc1c70822849f1243'
+                                    '65de5b56d5711dfed0a914e4372ce0b5c6b3f8d7a88b40fb1cecafa51ae17f1e'
                                     )]))
 
     x5 = dumps((0, 1, '[TXID]->[TX]', [(5,
-                                        ['6c828920ea3a968f0c3c4a8f14d70b696e0440d8e4e1d019cced1ba2cc63cd51',
-                                         '097cf9d4ec10711e809f316b7738bbbff94efe32ea2cd55e57ddf5840f828741'
+                                        ['65de5b56d5711dfed0a914e4372ce0b5c6b3f8d7a88b40fb1cecafa51ae17f1e',
+                                         '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                          ])]))
 
     x6 = dumps((0, 1, 'ADDR->[OUTPUT]', [(6,
@@ -97,7 +103,7 @@ while True:
                                              '16qgC3hzi38xo1vn2gGsNVwWaW1sEH3h9R'])]))
 
     x8 = dumps((0, 1, 'TXID->[MNODE]', [(8,
-                                         '571c7508413415debe4ba146a2ed141e4d4204d0743169ab3366b1f1e1960a5d'
+                                         '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                          )]))
 
     x9 = dumps((0, 1, 'NAME->[OUTPOINT]', [(9,
@@ -222,45 +228,24 @@ while True:
     # save it for later use
     firstTxHash = txhash(txser)
     x12 = dumps((0, 1, 'RELAY_TX', [(10, bytes.fromhex(txser))]))
-    #
-
-    #
 
     # x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(''))]))
-
     # ins = [{'output': u'97f7c7d8ac85e40c255f8a763b6cd9a68f3a94d2e93e8bfa08f977b92e55465e:0', 'value': 50000, 'address': u'1CQLd3bhw4EzaURHbKCwM5YZbUQfA4ReY6'}, {
     #    'output': u'4cc806bb04f730c445c60b3e0f4f44b54769a1c196ca37d8d4002135e4abd171:1', 'value': 50000, 'address': u'1CQLd3bhw4EzaURHbKCwM5YZbUQfA4ReY6'}]
     # outs = [{'value': 3000, 'address': '16iw1MQ1sy1DtRPYw3ao1bCamoyBJtRB4t'}]
 
-    # sendRequest(sock, x2)
-    # sendRequest(sock, x3)
-    # sendRequest(sock, x4)
-    # sendRequest(sock, x5)
-    # sendRequest(sock, x6)
-    # sendRequest(sock, x7)
-    # sendRequest(sock, x8)
-    # sendRequest(sock, x9)
-
-    # sendRequest(sock, x1)
-    # recvResponse(sock)
-    # sendRequest(sock, x10)
-    # recvResponse(sock)
-    print("***************************")
-    sendRequest(sock, x10)
-    recvResponse(sock)
-    print("***************************")
-    sendRequest(sock, x11)
-    recvResponse(sock)
-    print("***************************")
-    sendRequest(sock, x12)
-    recvResponse(sock)
-    # recvResponse(sock)
-    # recvResponse(sock)
-    # recvResponse(sock)
-    # recvResponse(sock)
-    # recvResponse(sock)
-    # recvResponse(sock)
-    # recvResponse(sock)
-    # recvResponse(sock)
-
-    time.sleep(120)
+    processReqResp(sock, x0)
+    processReqResp(sock, x1)
+    processReqResp(sock, x2)
+    processReqResp(sock, x3)
+    processReqResp(sock, x4)
+    processReqResp(sock, x5)
+    processReqResp(sock, x6)
+    processReqResp(sock, x7)
+    processReqResp(sock, x8)
+    processReqResp(sock, x9)
+    processReqResp(sock, x10)
+    processReqResp(sock, x11)
+    processReqResp(sock, x12)
+    
+    exit()
