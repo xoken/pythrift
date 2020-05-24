@@ -9,8 +9,8 @@ import threading
 from cryptos import *
 from cbor2 import dumps, loads, CBORTag
 import codecs
-import yaml
 import binascii
+import ssl
 
 
 def frame_op_return(op_return):
@@ -43,10 +43,6 @@ def processReqResp(s, payload):
     print("-----------------------------------------\n")
 
 def sendRequest(s, payload):
-    length = len(payload)
-    lenPrefix = length.to_bytes(2, 'big')
-    full = lenPrefix + payload
-    s.sendall(lenPrefix)
     s.sendall(payload)
 
 
@@ -60,9 +56,14 @@ def recvResponse(s):
 
 def client(host, port):
     print('Starting...')
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((host, int(port)))
-    return s
+    server_cert = '../arivi-app/certificate.cert'
+
+    sock = socket.socket(socket.AF_INET)
+    context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=server_cert)
+    context.options |= ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1  # optional
+    conn = context.wrap_socket(sock, server_hostname="localhost")
+    conn.connect((host, int(port)))
+    return conn
 
 
 if len(sys.argv) < 3:
@@ -247,5 +248,5 @@ while True:
     processReqResp(sock, x10)
     processReqResp(sock, x11)
     processReqResp(sock, x12)
-    
+
     exit()
