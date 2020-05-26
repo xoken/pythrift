@@ -9,8 +9,8 @@ import threading
 from cryptos import *
 from cbor2 import dumps, loads, CBORTag
 import codecs
-import yaml
 import binascii
+import ssl
 
 
 def frame_op_return(op_return):
@@ -38,31 +38,37 @@ def frame_op_return(op_return):
 
 def processReqResp(s, payload):
     sendRequest(s, payload)
+    print("send request:", payload)
     print("\n-----------------------------------------")
     recvResponse(s)
     print("-----------------------------------------\n")
 
 def sendRequest(s, payload):
-    length = len(payload)
-    lenPrefix = length.to_bytes(2, 'big')
-    full = lenPrefix + payload
-    s.sendall(lenPrefix)
     s.sendall(payload)
 
 
 def recvResponse(s):
-    prefix = s.recv(2)
-    leng = int.from_bytes(prefix, byteorder='big')
-    raw = s.recv(leng)
+    raw = s.recv()
     data = loads(raw)
     print('Received', data)
 
+def client(hostname, port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(100)
+    wrappedSocket = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1_1)
+    wrappedSocket.connect((hostname, int(port)))
+    return wrappedSocket
+    
+    
 
-def client(host, port):
-    print('Starting...')
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((host, int(port)))
-    return s
+#def client(hostname, port):
+    #context = ssl.create_default_context()
+    #with socket.create_connection((hostname, port)) as sock:
+        #with context.wrap_socket(sock, server_hostname=hostname) as ssock:
+            #print(ssock.version())
+            #ssock.connect((hostname, int(port)))
+            #return ssock
+        
 
 
 if len(sys.argv) < 3:
@@ -247,5 +253,5 @@ while True:
     processReqResp(sock, x10)
     processReqResp(sock, x11)
     processReqResp(sock, x12)
-    
+
     exit()
