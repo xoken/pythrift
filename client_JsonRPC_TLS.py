@@ -93,28 +93,34 @@ while True:
                                             '000000000000000007fc734cbf1fc04c59cf7ecb6af0707fd5cf5b8d46dc4c75'
                                            ]}}).encode('utf-8')
 
-    x4 = json.dumps({"reqId": 5, "method" : 'TXID->TX', "params" : {"gtTxHash" : '65de5b56d5711dfed0a914e4372ce0b5c6b3f8d7a88b40fb1cecafa51ae17f1e'}}).encode('utf-8')
+    x4 = json.dumps({"reqId": 5, "method" : 'TXID->TX', "params" : {"gtTxHash" : '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'}}).encode('utf-8')
 
-    x5 = json.dumps({"reqId" : 6, "method": '[TXID]->[TX]', "params" : {"gtTxHashes" :
-                                        ['65de5b56d5711dfed0a914e4372ce0b5c6b3f8d7a88b40fb1cecafa51ae17f1e',
+    x5 = json.dumps({"reqId": 5, "method" : 'TXID->RAWTX', "params" : {"gtRTxHash" : '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'}}).encode('utf-8')
+
+    x6 = json.dumps({"reqId" : 6, "method": '[TXID]->[TX]', "params" : {"gtTxHashes" :
+                                        ['3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac',
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                         ]}}).encode('utf-8')
 
-    x6 = json.dumps({"reqId": 7, "method" : 'ADDR->[OUTPUT]', "params" : {"gaAddrOutputs" : '13n561iVozTtMXJzAJNA5TQsnTboRvpxae'}}).encode('utf-8')
+    x7 = json.dumps({"reqId" : 7, "method": '[TXID]->[RAWTX]', "params" : {"gtRTxHashes" :
+                                        ['3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac',
+                                         '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
+                                        ]}}).encode('utf-8')
+    x8 = json.dumps({"reqId": 8, "method" : 'ADDR->[OUTPUT]', "params" : {"gaAddrOutputs" : '13n561iVozTtMXJzAJNA5TQsnTboRvpxae'}}).encode('utf-8')
 
-    x7 = json.dumps({"reqId" : 8, "method" : '[ADDR]->[OUTPUT]', "params" : {"gasAddrOutputs" :
+    x9 = json.dumps({"reqId" : 9, "method" : '[ADDR]->[OUTPUT]', "params" : {"gasAddrOutputs" :
                                             ['1P8Jd8qQM7y45iXLM1eiXCCmGRhCPjykZB',
                                              '16qgC3hzi38xo1vn2gGsNVwWaW1sEH3h9R']}}).encode('utf-8')
 
-    x8 = json.dumps({"reqId" : 9, "method": 'TXID->[MNODE]', "params" : { "gmbMerkleBranch": '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'}}).encode('utf-8')
+    x10 = json.dumps({"reqId" : 9, "method": 'TXID->[MNODE]', "params" : { "gmbMerkleBranch": '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'}}).encode('utf-8')
 
-    x9 = json.dumps({"reqId" : 10, "method": 'NAME->[OUTPOINT]', "params" : {"gaName": '[h', "gaIsProducer": True}}).encode('utf-8')
+    x11 = json.dumps({"reqId" : 10, "method": 'NAME->[OUTPOINT]', "params" : {"gaName": '[h', "gaIsProducer": True}}).encode('utf-8')
 
     gzip_compress = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
     hexValue = bytes.fromhex("47304402207b54b53f28158740477499528d371731d4448e578301c70b9d97d2815f3d52c0022023ba143375591b898d264a95f5fbcb511e344655268634b8356f25a1f9ef3065412103bddbdebb3c5360651703a750107ab445d2a64c9ecad27b44acb2c258326f5cdd")
     gzx = gzip_compress.compress(hexValue) + gzip_compress.flush()
     rTx = base64.b64encode(gzx).decode('utf-8')
-    x10 = json.dumps({"reqId": 11, "method": 'RELAY_TX', "params": {"rTx" : rTx }}).encode('utf-8')
+    x12 = json.dumps({"reqId": 11, "method": 'RELAY_TX', "params": {"rTx" : rTx }}).encode('utf-8')
 
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
@@ -132,5 +138,6 @@ while True:
     processReqResp(sock, x8)
     processReqResp(sock, x9)
     processReqResp(sock, x10)
+    processReqResp(sock, x11)
 
     exit()

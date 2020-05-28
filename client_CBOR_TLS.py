@@ -81,30 +81,39 @@ while True:
                                             ])]))
 
     x4 = dumps((0, 1, 'TXID->TX', [(4,
-                                    '65de5b56d5711dfed0a914e4372ce0b5c6b3f8d7a88b40fb1cecafa51ae17f1e'
+                                    '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
                                     )]))
 
-    x5 = dumps((0, 1, '[TXID]->[TX]', [(5,
-                                        ['65de5b56d5711dfed0a914e4372ce0b5c6b3f8d7a88b40fb1cecafa51ae17f1e',
+    x5 = dumps((0, 1, 'TXID->RAWTX', [(5,
+                                       '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
+                                       )]))
+
+    x6 = dumps((0, 1, '[TXID]->[TX]', [(6,
+                                        ['3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac',
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                          ])]))
 
-    x6 = dumps((0, 1, 'ADDR->[OUTPUT]', [(6,
+    x7 = dumps((0, 1, '[TXID]->[RAWTX]', [(7,
+                                        ['3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac',
+                                         '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
+                                         ])]))
+
+    x8 = dumps((0, 1, 'ADDR->[OUTPUT]', [(8,
                                           '13n561iVozTtMXJzAJNA5TQsnTboRvpxae')]))
 
-    x7 = dumps((0, 1, '[ADDR]->[OUTPUT]', [(7,
+    x9 = dumps((0, 1, '[ADDR]->[OUTPUT]', [(9,
                                             ['1P8Jd8qQM7y45iXLM1eiXCCmGRhCPjykZB',
                                              '16qgC3hzi38xo1vn2gGsNVwWaW1sEH3h9R'])]))
 
-    x8 = dumps((0, 1, 'TXID->[MNODE]', [(8,
+    x10 = dumps((0, 1, 'TXID->[MNODE]', [(10,
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                          )]))
 
-    x9 = dumps((0, 1, 'NAME->[OUTPOINT]', [(9,
+    x11 = dumps((0, 1, 'NAME->[OUTPOINT]', [(11,
                                             '[h', True
                                             )]))
 
-    x10 = dumps((0, 1, 'RELAY_TX', [(10, bytes.fromhex("47304402207b54b53f28158740477499528d371731d4448e578301c70b9d97d2815f3d52c0022023ba143375591b898d264a95f5fbcb511e344655268634b8356f25a1f9ef3065412103bddbdebb3c5360651703a750107ab445d2a64c9ecad27b44acb2c258326f5cdd"))]))
+    x12 = dumps((0, 1, 'RELAY_TX', [(12, bytes.fromhex("47304402207b54b53f28158740477499528d371731d4448e578301c70b9d97d2815f3d52c0022023ba143375591b898d264a95f5fbcb511e344655268634b8356f25a1f9ef3065412103bddbdebb3c5360651703a750107ab445d2a64c9ecad27b44acb2c258326f5cdd"))]))
 
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
@@ -122,5 +131,7 @@ while True:
     processReqResp(sock, x8)
     processReqResp(sock, x9)
     processReqResp(sock, x10)
+    processReqResp(sock, x11)
+    processReqResp(sock, x12)
 
     exit()
