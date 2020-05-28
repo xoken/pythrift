@@ -84,14 +84,13 @@ while True:
                                     '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
                                     )]))
 
-    x5 = dumps((0, 1, 'TXID->RAWTX', [(5,
-                                       '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
-                                       )]))
-
-    x6 = dumps((0, 1, '[TXID]->[TX]', [(6,
+    x5 = dumps((0, 1, '[TXID]->[TX]', [(5,
                                         ['3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac',
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                          ])]))
+    x6 = dumps((0, 1, 'TXID->RAWTX', [(6,
+                                       '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
+                                       )]))
 
     x7 = dumps((0, 1, '[TXID]->[RAWTX]', [(7,
                                         ['3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac',

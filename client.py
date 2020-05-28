@@ -93,26 +93,34 @@ while True:
                                             ])]))
 
     x4 = dumps((0, 1, 'TXID->TX', [(4,
-                                    '65de5b56d5711dfed0a914e4372ce0b5c6b3f8d7a88b40fb1cecafa51ae17f1e'
+                                    '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
                                     )]))
 
     x5 = dumps((0, 1, '[TXID]->[TX]', [(5,
-                                        ['65de5b56d5711dfed0a914e4372ce0b5c6b3f8d7a88b40fb1cecafa51ae17f1e',
+                                        ['3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac',
+                                         '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
+                                         ])]))
+    x6 = dumps((0, 1, 'TXID->RAWTX', [(6,
+                                       '3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
+                                       )]))
+
+    x7 = dumps((0, 1, '[TXID]->[RAWTX]', [(7,
+                                        ['3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac',
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                          ])]))
 
-    x6 = dumps((0, 1, 'ADDR->[OUTPUT]', [(6,
+    x8 = dumps((0, 1, 'ADDR->[OUTPUT]', [(8,
                                           '13n561iVozTtMXJzAJNA5TQsnTboRvpxae')]))
 
-    x7 = dumps((0, 1, '[ADDR]->[OUTPUT]', [(7,
+    x9 = dumps((0, 1, '[ADDR]->[OUTPUT]', [(9,
                                             ['1P8Jd8qQM7y45iXLM1eiXCCmGRhCPjykZB',
                                              '16qgC3hzi38xo1vn2gGsNVwWaW1sEH3h9R'])]))
 
-    x8 = dumps((0, 1, 'TXID->[MNODE]', [(8,
+    x10 = dumps((0, 1, 'TXID->[MNODE]', [(10,
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                          )]))
 
-    x9 = dumps((0, 1, 'NAME->[OUTPOINT]', [(9,
+    x11 = dumps((0, 1, 'NAME->[OUTPOINT]', [(11,
                                             '[h', True
                                             )]))
 
@@ -160,7 +168,7 @@ while True:
     print(txhash(txser))
     # save it for later use
     firstTxHash = txhash(txser)
-    x10 = dumps((0, 1, 'RELAY_TX', [(10, bytes.fromhex(txser))]))
+    x12 = dumps((0, 1, 'RELAY_TX', [(12, bytes.fromhex(txser))]))
 
 ###########
 
@@ -193,7 +201,7 @@ while True:
     print(txser)
     print(txhash(txser))
     secondTxHash = txhash(txser)
-    x11 = dumps((0, 1, 'RELAY_TX', [(10, bytes.fromhex(txser))]))
+    x13 = dumps((0, 1, 'RELAY_TX', [(12, bytes.fromhex(txser))]))
 
 ############
 
@@ -233,7 +241,7 @@ while True:
     print(txhash(txser))
     # save it for later use
     firstTxHash = txhash(txser)
-    x12 = dumps((0, 1, 'RELAY_TX', [(10, bytes.fromhex(txser))]))
+    x14 = dumps((0, 1, 'RELAY_TX', [(12, bytes.fromhex(txser))]))
 
     # x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(''))]))
     # ins = [{'output': u'97f7c7d8ac85e40c255f8a763b6cd9a68f3a94d2e93e8bfa08f977b92e55465e:0', 'value': 50000, 'address': u'1CQLd3bhw4EzaURHbKCwM5YZbUQfA4ReY6'}, {
@@ -253,5 +261,7 @@ while True:
     processReqResp(sock, x10)
     processReqResp(sock, x11)
     processReqResp(sock, x12)
+    processReqResp(sock, x13)
+    processReqResp(sock, x14)
 
     exit()
