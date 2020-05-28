@@ -49,7 +49,6 @@ def processReqResp(s, payload):
 def sendRequest(s, payload):
     s.sendall(payload)
 
-
 def recvResponse(s):
     finalResp = ''
     while 1:
@@ -72,6 +71,9 @@ def client(hostname, port):
     wrappedSocket.connect((hostname, int(port)))
     return wrappedSocket
 
+
+# start
+# command line args for host, port
 if len(sys.argv) < 3:
     print('Invalid args, need: <hostname> <port>')
     exit(0)

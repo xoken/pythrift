@@ -35,7 +35,6 @@ def frame_op_return(op_return):
     print('final', fs)
     return fs
 
-
 def processReqResp(s, payload):
     sendRequest(s, payload)
     print("send request:", payload)
@@ -45,7 +44,6 @@ def processReqResp(s, payload):
 
 def sendRequest(s, payload):
     s.sendall(payload)
-
 
 def recvResponse(s):
     raw = s.recv()
@@ -59,18 +57,8 @@ def client(hostname, port):
     wrappedSocket.connect((hostname, int(port)))
     return wrappedSocket
 
-
-
-#def client(hostname, port):
-    #context = ssl.create_default_context()
-    #with socket.create_connection((hostname, port)) as sock:
-        #with context.wrap_socket(sock, server_hostname=hostname) as ssock:
-            #print(ssock.version())
-            #ssock.connect((hostname, int(port)))
-            #return ssock
-
-
-
+# start
+# command line args for host, port
 if len(sys.argv) < 3:
     print('Invalid args, need: <hostname> <port>')
     exit(0)
