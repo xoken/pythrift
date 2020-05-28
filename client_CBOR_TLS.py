@@ -104,6 +104,8 @@ while True:
                                             '[h', True
                                             )]))
 
+    x10 = dumps((0, 1, 'RELAY_TX', [(10, bytes.fromhex("47304402207b54b53f28158740477499528d371731d4448e578301c70b9d97d2815f3d52c0022023ba143375591b898d264a95f5fbcb511e344655268634b8356f25a1f9ef3065412103bddbdebb3c5360651703a750107ab445d2a64c9ecad27b44acb2c258326f5cdd"))]))
+
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
     pub = c.privtopub(priv)
@@ -119,5 +121,6 @@ while True:
     processReqResp(sock, x7)
     processReqResp(sock, x8)
     processReqResp(sock, x9)
+    processReqResp(sock, x10)
 
     exit()

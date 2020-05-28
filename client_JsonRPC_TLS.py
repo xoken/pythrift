@@ -110,6 +110,12 @@ while True:
 
     x9 = json.dumps({"reqId" : 10, "method": 'NAME->[OUTPOINT]', "params" : {"gaName": '[h', "gaIsProducer": True}}).encode('utf-8')
 
+    gzip_compress = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
+    hexValue = bytes.fromhex("47304402207b54b53f28158740477499528d371731d4448e578301c70b9d97d2815f3d52c0022023ba143375591b898d264a95f5fbcb511e344655268634b8356f25a1f9ef3065412103bddbdebb3c5360651703a750107ab445d2a64c9ecad27b44acb2c258326f5cdd")
+    gzx = gzip_compress.compress(hexValue) + gzip_compress.flush()
+    rTx = base64.b64encode(gzx).decode('utf-8')
+    x10 = json.dumps({"reqId": 11, "method": 'RELAY_TX', "params": {"rTx" : rTx }}).encode('utf-8')
+
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
     pub = c.privtopub(priv)
@@ -125,5 +131,6 @@ while True:
     processReqResp(sock, x7)
     processReqResp(sock, x8)
     processReqResp(sock, x9)
+    processReqResp(sock, x10)
 
     exit()

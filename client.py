@@ -58,8 +58,8 @@ def client(hostname, port):
     wrappedSocket = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1_1)
     wrappedSocket.connect((hostname, int(port)))
     return wrappedSocket
-    
-    
+
+
 
 #def client(hostname, port):
     #context = ssl.create_default_context()
@@ -68,7 +68,7 @@ def client(hostname, port):
             #print(ssock.version())
             #ssock.connect((hostname, int(port)))
             #return ssock
-        
+
 
 
 if len(sys.argv) < 3:
