@@ -110,17 +110,25 @@ while True:
                                          ])]))
 
     x8 = dumps((0, 1, 'ADDR->[OUTPUT]', [(8,
-                                          '13n561iVozTtMXJzAJNA5TQsnTboRvpxae')]))
+                                          '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9')]))
 
     x9 = dumps((0, 1, '[ADDR]->[OUTPUT]', [(9,
-                                            ['1P8Jd8qQM7y45iXLM1eiXCCmGRhCPjykZB',
+                                            ['18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9',
                                              '16qgC3hzi38xo1vn2gGsNVwWaW1sEH3h9R'])]))
 
-    x10 = dumps((0, 1, 'TXID->[MNODE]', [(10,
+    x10 = dumps((0, 1, 'SCRIPTHASH->[OUTPUT]', [(10,
+                                          '8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67')]))
+
+    x11 = dumps((0, 1, '[SCRIPTHASH]->[OUTPUT]', [(11,
+                                            ['8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67',
+                                             '1fb931ea41f204ce837f63dcffdec09720c8c8d285196050d32fd4e5dc2915be'
+                                             ])]))
+
+    x12 = dumps((0, 1, 'TXID->[MNODE]', [(12,
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                          )]))
 
-    x11 = dumps((0, 1, 'NAME->[OUTPOINT]', [(11,
+    x13 = dumps((0, 1, 'NAME->[OUTPOINT]', [(13,
                                             '[h', True
                                             )]))
 
@@ -168,7 +176,7 @@ while True:
     print(txhash(txser))
     # save it for later use
     firstTxHash = txhash(txser)
-    x12 = dumps((0, 1, 'RELAY_TX', [(12, bytes.fromhex(txser))]))
+    x14 = dumps((0, 1, 'RELAY_TX', [(14, bytes.fromhex(txser))]))
 
 ###########
 
@@ -201,7 +209,7 @@ while True:
     print(txser)
     print(txhash(txser))
     secondTxHash = txhash(txser)
-    x13 = dumps((0, 1, 'RELAY_TX', [(12, bytes.fromhex(txser))]))
+    x15 = dumps((0, 1, 'RELAY_TX', [(14, bytes.fromhex(txser))]))
 
 ############
 
@@ -241,7 +249,7 @@ while True:
     print(txhash(txser))
     # save it for later use
     firstTxHash = txhash(txser)
-    x14 = dumps((0, 1, 'RELAY_TX', [(12, bytes.fromhex(txser))]))
+    x16 = dumps((0, 1, 'RELAY_TX', [(14, bytes.fromhex(txser))]))
 
     # x10 = dumps((0, 1, 'RELAY_TX', [(9, bytes.fromhex(''))]))
     # ins = [{'output': u'97f7c7d8ac85e40c255f8a763b6cd9a68f3a94d2e93e8bfa08f977b92e55465e:0', 'value': 50000, 'address': u'1CQLd3bhw4EzaURHbKCwM5YZbUQfA4ReY6'}, {
@@ -263,5 +271,7 @@ while True:
     processReqResp(sock, x12)
     processReqResp(sock, x13)
     processReqResp(sock, x14)
+    processReqResp(sock, x15)
+    processReqResp(sock, x16)
 
     exit()
