@@ -6,7 +6,7 @@ import glob
 import time
 import socket
 import threading
-from cryptos import *
+from cryptos import Bitcoin, sha256, deserialize
 from cbor2 import dumps, loads, CBORTag
 import codecs
 import binascii
@@ -49,8 +49,10 @@ def sendRequest(s, payload):
 
 def recvResponse(s):
     raw = s.recv()
+    print('Received', raw)
     data = loads(raw)
     print('Received', data)
+    return raw
 
 def client(hostname, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -138,6 +140,8 @@ while True:
     addr = c.pubtoaddr(pub)
 
 ###############
+    inputsD = \
+        [(0, '4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b', 0)]
 
     inputs = \
         [{'output': '6c828920ea3a968f0c3c4a8f14d70b696e0440d8e4e1d019cced1ba2cc63cd51:0', 'value': 1000000},
@@ -167,7 +171,12 @@ while True:
     outs = op_return + outs
     tx = c.mktx(inputs, outs)
     print('\n\nRAW TX : ', tx)
-    txs1 = c.sign(tx, 0, priv)
+    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, "", True, ('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 1000000), ('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 0))]))
+    sendRequest(sock, x17)
+    # txs1 = c.sign(tx, 0, priv)
+    # print('\n\nFIRST SIGN : ', txs1)
+    txs = recvResponse(sock)
+    txs1 = deserialize(txs)
     print('\n\nFIRST SIGN : ', txs1)
     txs2 = c.sign(txs1, 1, priv)
     print('\n\nSECOND SIGN : ', txs2)
