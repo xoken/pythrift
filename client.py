@@ -171,7 +171,7 @@ while True:
     outs = op_return + outs
     tx = c.mktx(inputs, outs)
     print('\n\nRAW TX : ', tx)
-    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, "", True, ('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 1000000), ('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 0))]))
+    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, "", True, ('18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 1000000), ('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 0))]))
     sendRequest(sock, x17)
     # txs1 = c.sign(tx, 0, priv)
     # print('\n\nFIRST SIGN : ', txs1)
