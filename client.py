@@ -6,11 +6,12 @@ import glob
 import time
 import socket
 import threading
-from cryptos import Bitcoin, sha256, deserialize
+from cryptos import Bitcoin, sha256, deserialize, serialize, txhash
 from cbor2 import dumps, loads, CBORTag
 import codecs
 import binascii
 import ssl
+import json as JSON
 
 
 def frame_op_return(op_return):
@@ -60,7 +61,6 @@ def client(hostname, port):
     wrappedSocket = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1_1)
     wrappedSocket.connect((hostname, int(port)))
     return wrappedSocket
-
 
 
 #def client(hostname, port):
@@ -141,14 +141,14 @@ while True:
 
 ###############
     inputsD = \
-        [(0, '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38', 0)]
+        [(0, 'dee533d8d0ac0b1f0ccb49b80f075fee63802a9fab9114a90e9c5ae866695731', 0)]
 
     inputs = \
         [{'output': 'e4714990d74d9636c2efdb98a5e7dc7c1c516a43572638641eb67dda9df43015:0', 'value': 1000000},
          {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
     outs = [{'value': 1000000,
              'address': '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9'},
-            {'value': 0,
+            {'value': 5555,
              'address': '1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL'}]
     allegory = (0, 1, [],
                 (0, (0, 0),
@@ -163,17 +163,17 @@ while True:
     op_return = [{'script': ss, 'value': 0}]
     outs = op_return + outs
     tx = c.mktx(inputs, outs)
-    print('\n\nRAW TX : ', tx)
-    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, "", True, ('18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 1000000), ('1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL', 0))]))
+    print('\n\nRaw Tx : ', tx)
+    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, "", True, ('18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 1000000), ('1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL', 5555))]))
     sendRequest(sock, x17)
-    txs1 = c.sign(tx, 0, priv)
-    print('\n\nFIRST SIGN : ', txs1)
+
     txs = recvResponse(sock)
-    print('\n\nFIRST SIGN : ', loads(txs)[4][0][1])
-    txs1 = loads(txs)[4][0][1].decode('utf-8')
-    print('\n\nFIRST SIGN : ', txs1)
-    txs2 = c.sign(txs1, 1, priv)
-    print('\n\nSECOND SIGN : ', txs2)
+    cbortx = loads(txs)[4][0][1].decode('utf-8')
+    jsontx = JSON.loads(cbortx)
+    print('\n\nJSON Tx (received): ', jsontx)
+    txs2 = c.sign(jsontx, 0, priv)
+ 
+    print('\n\nSigning inupts (own) : ', txs2)
     txser = serialize(txs2)
     print(txser)
     print(txhash(txser))
