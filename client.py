@@ -141,22 +141,15 @@ while True:
 
 ###############
     inputsD = \
-        [(0, '4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b', 0)]
+        [(0, '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38', 0)]
 
     inputs = \
-        [{'output': '6c828920ea3a968f0c3c4a8f14d70b696e0440d8e4e1d019cced1ba2cc63cd51:0', 'value': 1000000},
+        [{'output': 'e4714990d74d9636c2efdb98a5e7dc7c1c516a43572638641eb67dda9df43015:0', 'value': 1000000},
          {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
     outs = [{'value': 1000000,
-             'address': '2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF'},
-            {'value': 250000,
-             'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'},
-            {'value': 250000,
-             'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'},
-            {'value': 250000,
-             'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'},
-            {'value': 250000,
-             'address': 'mrvHv6ggk5gFMatuJtBKAzktTU1N3MYdu2'}]
-
+             'address': '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9'},
+            {'value': 0,
+             'address': '1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL'}]
     allegory = (0, 1, [],
                 (0, (0, 0),
                  (0, (0, 1), [(0, "XokenP2P", "someuri1")]),
@@ -171,12 +164,13 @@ while True:
     outs = op_return + outs
     tx = c.mktx(inputs, outs)
     print('\n\nRAW TX : ', tx)
-    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, "", True, ('18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 1000000), ('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 0))]))
+    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, "", True, ('18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 1000000), ('1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL', 0))]))
     sendRequest(sock, x17)
-    # txs1 = c.sign(tx, 0, priv)
-    # print('\n\nFIRST SIGN : ', txs1)
+    txs1 = c.sign(tx, 0, priv)
+    print('\n\nFIRST SIGN : ', txs1)
     txs = recvResponse(sock)
-    txs1 = deserialize(txs)
+    print('\n\nFIRST SIGN : ', loads(txs)[4][0][1])
+    txs1 = loads(txs)[4][0][1].decode('utf-8')
     print('\n\nFIRST SIGN : ', txs1)
     txs2 = c.sign(txs1, 1, priv)
     print('\n\nSECOND SIGN : ', txs2)
