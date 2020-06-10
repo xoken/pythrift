@@ -50,10 +50,21 @@ def sendRequest(s, payload):
 
 def recvResponse(s):
     raw = s.recv()
-    print('Received', raw)
-    data = loads(raw)
+    print('Received 1st', raw)
+    prefix = raw[:4]
+    leng = int.from_bytes(prefix, byteorder='big')
+    print ('Prefixed Length: ', leng)
+    full = raw [4:]
+    cumlen = len(raw) - 4
+    while (leng > cumlen):
+        cur = s.recv()
+        print('Received next', cur)
+        cumlen = cumlen + len(cur)
+        full = full + cur
+    print ('Full msg: ', full)
+    data = loads(full)
     print('Received', data)
-    return raw
+    return data
 
 def client(hostname, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -164,15 +175,14 @@ while True:
     outs = op_return + outs
     tx = c.mktx(inputs, outs)
     print('\n\nRaw Tx : ', tx)
-    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, "", True, ('18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 1000000), ('1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL', 5555))]))
+    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, ([90], True), ('18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 1000000), ('1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL', 5555))]))
     sendRequest(sock, x17)
 
-    txs = recvResponse(sock)
-    cbortx = loads(txs)[4][0][1].decode('utf-8')
+    resp = recvResponse(sock)
+    cbortx = resp[4][0][1].decode('utf-8')
     jsontx = JSON.loads(cbortx)
     print('\n\nJSON Tx (received): ', jsontx)
     txs2 = c.sign(jsontx, 0, priv)
- 
     print('\n\nSigning inupts (own) : ', txs2)
     txser = serialize(txs2)
     print(txser)
@@ -180,7 +190,10 @@ while True:
     # save it for later use
     firstTxHash = txhash(txser)
     x14 = dumps((0, 1, 'RELAY_TX', [(14, bytes.fromhex(txser))]))
-
+    sendRequest(sock, x14)
+    rrr = recvResponse(sock)
+    print (rrr)
+    exit(1)
 ###########
 
     inputs = \
@@ -259,22 +272,22 @@ while True:
     #    'output': u'4cc806bb04f730c445c60b3e0f4f44b54769a1c196ca37d8d4002135e4abd171:1', 'value': 50000, 'address': u'1CQLd3bhw4EzaURHbKCwM5YZbUQfA4ReY6'}]
     # outs = [{'value': 3000, 'address': '16iw1MQ1sy1DtRPYw3ao1bCamoyBJtRB4t'}]
 
-    processReqResp(sock, x0)
-    processReqResp(sock, x1)
-    processReqResp(sock, x2)
-    processReqResp(sock, x3)
-    processReqResp(sock, x4)
-    processReqResp(sock, x5)
-    processReqResp(sock, x6)
-    processReqResp(sock, x7)
-    processReqResp(sock, x8)
-    processReqResp(sock, x9)
-    processReqResp(sock, x10)
-    processReqResp(sock, x11)
-    processReqResp(sock, x12)
-    processReqResp(sock, x13)
+    # processReqResp(sock, x0)
+    # processReqResp(sock, x1)
+    # processReqResp(sock, x2)
+    # processReqResp(sock, x3)
+    # processReqResp(sock, x4)
+    # processReqResp(sock, x5)
+    # processReqResp(sock, x6)
+    # processReqResp(sock, x7)
+    # processReqResp(sock, x8)
+    # processReqResp(sock, x9)
+    # processReqResp(sock, x10)
+    # processReqResp(sock, x11)
+    # processReqResp(sock, x12)
+    # processReqResp(sock, x13)
     processReqResp(sock, x14)
-    processReqResp(sock, x15)
-    processReqResp(sock, x16)
+    # processReqResp(sock, x15)
+    # processReqResp(sock, x16)
 
     exit()
