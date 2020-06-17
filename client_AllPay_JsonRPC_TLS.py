@@ -85,9 +85,9 @@ while True:
 
     name = sha256('test')
 
-    x0 = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'ADD_XPUBKEY', "params" : {"xpubKey" : 'xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8', "addressCount": 2, "name": name}}).encode('utf-8')
+    x0 = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'ADD_XPUBKEY', "params" : {"xpubKey" : 'xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8', "addressCount": 2, "allegoryHash": name}}).encode('utf-8')
 
-    x1 = json.dumps({"id": 1, "jsonrpc" : "2.0", "method": 'NAME->ADDR', "params" : {"name": name}}).encode('utf-8')
+    x1 = json.dumps({"id": 1, "jsonrpc" : "2.0", "method": 'NAME->ADDR', "params" : {"allegoryHash": name}}).encode('utf-8')
 
     processReqResp(sock, x0)
     processReqResp(sock, x1)
