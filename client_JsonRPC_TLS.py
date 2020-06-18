@@ -117,7 +117,7 @@ while True:
                                              '14gMdTsvq3Q6PnXK5jhn8KVgvWJnxzDV5m',
                                              '18E2ymquodpWHNhNzo8BC8d6QDwJNsEaYV',
                                              '1A6NvRKPsswAX8wwPKY4Ti5FBeNCpne1NC'],
-                                             "gasPageSize": 5, lastNominalTxIndex: 121129000000003
+                                             "gasPageSize": 5, "lastNominalTxIndex" : 121129000000003
                                              }}).encode('utf-8')
 
     x10 = json.dumps({"id": 10, "jsonrpc" : "2.0",  "method" : 'SCRIPTHASH->[OUTPUT]', "params" : {"gaScriptHashOutputs" : '8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67', "gaScriptHashPageSize" : 2}}).encode('utf-8')
@@ -133,7 +133,7 @@ while True:
                                              'f8f3ff7bb10bc246a0c657c8f79c47db7588b086072e11d821489f461b41b2f5',
                                              '18401302386e56dd7309aa10fb89a7db1bbe77bc6bff5fda8619a9b11a809497',
                                              '81dcf5b60b87b03c66ab530fed899c656c6a3b03f45352ad5f949bd9bfc328e7'],
-                                             "gasScriptHashPageSize" : 5, lastNominalTxIndex: 2086000000001}}).encode('utf-8')
+                                             "gasScriptHashPageSize" : 5, "lastNominalTxIndex" : 2086000000001}}).encode('utf-8')
 
     x12 = json.dumps({"id" : 12, "jsonrpc" : "2.0",  "method": 'TXID->[MNODE]', "params" : { "gmbMerkleBranch": '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'}}).encode('utf-8')
 
