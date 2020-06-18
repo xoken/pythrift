@@ -152,7 +152,7 @@ while True:
 
 ###############
     inputsD = \
-        [(0, 'dee533d8d0ac0b1f0ccb49b80f075fee63802a9fab9114a90e9c5ae866695731', 0)]
+        [( (0, 'dee533d8d0ac0b1f0ccb49b80f075fee63802a9fab9114a90e9c5ae866695731', 0), 12345678)]
 
     inputs = \
         [{'output': 'e4714990d74d9636c2efdb98a5e7dc7c1c516a43572638641eb67dda9df43015:0', 'value': 1000000},
@@ -173,9 +173,9 @@ while True:
     print('hexlified ', str(ss))
     op_return = [{'script': ss, 'value': 0}]
     outs = op_return + outs
-    tx = c.mktx(inputs, outs)
-    print('\n\nRaw Tx : ', tx)
-    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, ([90], True), ('18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 1000000), ('1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL', 5555))]))
+    # tx = c.mktx(inputs, outs)
+    # print('\n\nRaw Tx : ', tx)
+    x17 = dumps((0, 1, 'PS_ALLEGORY_TX', [(15, inputsD, ([90,91,82,130], False), '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', '1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL')]))
     sendRequest(sock, x17)
 
     resp = recvResponse(sock)
