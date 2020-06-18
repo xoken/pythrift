@@ -123,19 +123,32 @@ while True:
                                          ])]))
 
     x8 = dumps((0, 1, 'ADDR->[OUTPUT]', [(8,
-                                          '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9')]))
+                                          '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', 2)]))
 
     x9 = dumps((0, 1, '[ADDR]->[OUTPUT]', [(9,
-                                            ['18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9',
-                                             '16qgC3hzi38xo1vn2gGsNVwWaW1sEH3h9R'])]))
+                                            ['14QdCax3sR6ZVMo6smMyUNzN5Fx9zA8Sjj',
+                                             '17VaRoTC8dkb6vHyE37EPZByzpKvK1u2ZU',
+                                             '1NGw8LYZ93g2RiZpiP4eCniU4YmQjH1tP9',
+                                             '1EHM42QUBLSA9AdJGH6XmAMYSnh7rzTPuR',
+                                             '1JbmUfm9fpu5o9BfCATRhbp4NiDR5D3UBX',
+                                             '14gMdTsvq3Q6PnXK5jhn8KVgvWJnxzDV5m',
+                                             '18E2ymquodpWHNhNzo8BC8d6QDwJNsEaYV',
+                                             '1A6NvRKPsswAX8wwPKY4Ti5FBeNCpne1NC'], 5, 121129000000003)]))
 
     x10 = dumps((0, 1, 'SCRIPTHASH->[OUTPUT]', [(10,
-                                          '8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67')]))
+                                          '8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67', 2)]))
 
     x11 = dumps((0, 1, '[SCRIPTHASH]->[OUTPUT]', [(11,
                                             ['8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67',
-                                             '1fb931ea41f204ce837f63dcffdec09720c8c8d285196050d32fd4e5dc2915be'
-                                             ])]))
+                                             '1fb931ea41f204ce837f63dcffdec09720c8c8d285196050d32fd4e5dc2915be',
+                                             'a77c108d9b34194bf6e83145a86e867b74cefa959d16d363b0bee31aa1799160',
+                                             '41ae9fa8b864c24467cc8d9bd18c04bbcaa98086dfea8de3366e901b1d5f2fd3',
+                                             '5afb578976d3bbfd470f906586cb33abf64830563e0c43255b34a421665e04f7',
+                                             '050d94209dfbc9150fad697c37defc83089b138105d23d32e3e6c32eb78f4429',
+                                             '946f050043939a8e3d4ccf3ef393d0d8832141dcbdcb9c2363ac78cc3649d080',
+                                             'f8f3ff7bb10bc246a0c657c8f79c47db7588b086072e11d821489f461b41b2f5',
+                                             '18401302386e56dd7309aa10fb89a7db1bbe77bc6bff5fda8619a9b11a809497',
+                                             '81dcf5b60b87b03c66ab530fed899c656c6a3b03f45352ad5f949bd9bfc328e7'], 5, 2086000000001)]))
 
     x12 = dumps((0, 1, 'TXID->[MNODE]', [(12,
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
