@@ -45,10 +45,26 @@ def processReqResp(s, payload):
 def sendRequest(s, payload):
     s.sendall(payload)
 
+
 def recvResponse(s):
     raw = s.recv()
-    data = loads(raw)
+    print('Received 1st', raw)
+    prefix = raw[:4]
+    leng = int.from_bytes(prefix, byteorder='big')
+    print ('Prefixed Length: ', leng)
+    full = raw [4:]
+    cumlen = len(raw) - 4
+    while (leng > cumlen):
+        cur = s.recv()
+        print('Received next', cur)
+        cumlen = cumlen + len(cur)
+        full = full + cur
+    print ('Full msg: ', full)
+    data = loads(full)
     print('Received', data)
+    return data
+
+
 
 def client(hostname, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

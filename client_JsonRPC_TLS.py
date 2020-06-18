@@ -50,18 +50,20 @@ def sendRequest(s, payload):
     s.sendall(payload)
 
 def recvResponse(s):
-    finalResp = ''
-    while 1:
-        raw = s.recv(16384)
-        try:
-            finalResp += raw.decode('ascii')
-            x = json.loads(''.join(finalResp))
-            break
-        except:
-            if not raw:
-                break
-    data = json.loads(finalResp)
-    print('Received', data)
+    raw = s.recv()
+    print('Received 1st', raw)
+    prefix = raw[:4]
+    leng = int.from_bytes(prefix, byteorder='big')
+    print ('Prefixed Length: ', leng)
+    full = raw [4:]
+    cumlen = len(raw) - 4
+    while (leng > cumlen):
+        cur = s.recv()
+        print('Received next', cur)
+        cumlen = cumlen + len(cur)
+        full = full + cur
+    print ('Full msg: ', full)
+    return full
 
 def client(hostname, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
