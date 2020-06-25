@@ -82,9 +82,9 @@ if len(sys.argv) < 3:
 sock = client(sys.argv[1], sys.argv[2])
 
 while True:
-    x_ = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'AUTHENTICATE', "params" : {"username" : "admin", "password": "MTIyOTA1MjUxMTU2NTQ0NTMyNjM="}}).encode('utf-8')
+    x_ = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'AUTHENTICATE', "params" : {"username" : "admin", "password": "NTc3MzQ1NzEyMDEwMjk2NTE4MQ=="}}).encode('utf-8')
 
-    x0 = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'HEIGHT->BLOCK', "params" : {"gbHeight" : 100}}).encode('utf-8')
+    x0 = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'HEIGHT->BLOCK', "params" : { "sessionKey": "4efe36adc5a118e5cf14a910f0ba618ee94d0a8dc1fb293a7c5fd96a4429f907", "methodParams": {"gbHeight" : 100} } }).encode('utf-8')
 
     x1 = json.dumps({"id": 1, "jsonrpc" : "2.0", "method": '[HEIGHT]->[BLOCK]', "params" : {"gbHeights": [100, 101, 102]}}).encode('utf-8')
 
@@ -155,7 +155,7 @@ while True:
 
 
     
-    processReqResp(sock, x_)
+    #processReqResp(sock, x_)
     processReqResp(sock, x0)
     # processReqResp(sock, x1)
     # processReqResp(sock, x2)
