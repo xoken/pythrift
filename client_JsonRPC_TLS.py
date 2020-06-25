@@ -82,6 +82,7 @@ if len(sys.argv) < 3:
 sock = client(sys.argv[1], sys.argv[2])
 
 while True:
+    x_ = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'AUTHENTICATE', "params" : {"username" : "admin", "password": "MTIyOTA1MjUxMTU2NTQ0NTMyNjM="}}).encode('utf-8')
 
     x0 = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'HEIGHT->BLOCK', "params" : {"gbHeight" : 100}}).encode('utf-8')
 
@@ -152,20 +153,23 @@ while True:
     pub = c.privtopub(priv)
     addr = c.pubtoaddr(pub)
 
+
+    
+    processReqResp(sock, x_)
     processReqResp(sock, x0)
-    processReqResp(sock, x1)
-    processReqResp(sock, x2)
-    processReqResp(sock, x3)
-    processReqResp(sock, x4)
-    processReqResp(sock, x5)
-    processReqResp(sock, x6)
-    processReqResp(sock, x7)
-    processReqResp(sock, x8)
-    processReqResp(sock, x9)
-    processReqResp(sock, x10)
-    processReqResp(sock, x11)
-    processReqResp(sock, x12)
-    processReqResp(sock, x13)
-    processReqResp(sock, x14)
+    # processReqResp(sock, x1)
+    # processReqResp(sock, x2)
+    # processReqResp(sock, x3)
+    # processReqResp(sock, x4)
+    # processReqResp(sock, x5)
+    # processReqResp(sock, x6)
+    # processReqResp(sock, x7)
+    # processReqResp(sock, x8)
+    # processReqResp(sock, x9)
+    # processReqResp(sock, x10)
+    # processReqResp(sock, x11)
+    # processReqResp(sock, x12)
+    # processReqResp(sock, x13)
+    # processReqResp(sock, x14)
 
     exit()
