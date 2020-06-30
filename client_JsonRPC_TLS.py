@@ -179,6 +179,8 @@ while True:
     rTx = base64.b64encode(gzx).decode('utf-8')
     x14 = json.dumps({"id": 14, "jsonrpc" : "2.0",  "method": 'RELAY_TX', "params": {"sessionKey": sessionKey, "methodParams": {"rTx" : rTx }}}).encode('utf-8')
 
+    x15 = json.dumps({"id": 15, "jsonrpc" : "2.0",  "method": 'TX_SPEND_STATUS', "params": {"sessionKey": sessionKey, "methodParams": {"gtssHash" : '920e20148b0cdf48d6abe5e70306c52708428615b3f39c24e2f83c21b1ae7eaa', "gtssIndex": 0}}}).encode('utf-8')
+
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
     pub = c.privtopub(priv)
@@ -201,5 +203,6 @@ while True:
     processReqResp(sock, x12)
     processReqResp(sock, x13)
     processReqResp(sock, x14)
+    processReqResp(sock, x15)
 
     exit()
