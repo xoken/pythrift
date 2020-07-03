@@ -179,7 +179,11 @@ while True:
     rTx = base64.b64encode(gzx).decode('utf-8')
     x14 = json.dumps({"id": 14, "jsonrpc" : "2.0",  "method": 'RELAY_TX', "params": {"sessionKey": sessionKey, "methodParams": {"rTx" : rTx }}}).encode('utf-8')
 
-    x15 = json.dumps({"id": 15, "jsonrpc" : "2.0",  "method": 'TX_SPEND_STATUS', "params": {"sessionKey": sessionKey, "methodParams": {"gtssHash" : '920e20148b0cdf48d6abe5e70306c52708428615b3f39c24e2f83c21b1ae7eaa', "gtssIndex": 0}}}).encode('utf-8')
+    x15 = json.dumps({"id": 15, "jsonrpc" : "2.0",  "method": 'OUTPOINT->SPEND_STATUS', "params": {"sessionKey": sessionKey, "methodParams": {"gtssHash" : '920e20148b0cdf48d6abe5e70306c52708428615b3f39c24e2f83c21b1ae7eaa', "gtssIndex": 0}}}).encode('utf-8')
+    
+    x16 = json.dumps({"id": 16, "jsonrpc" : "2.0",  "method": 'CHAIN_INFO', "params": {"sessionKey": sessionKey}}).encode('utf-8')
+    
+    x17 = json.dumps({"id": 17, "jsonrpc" : "2.0",  "method" : 'TXID->TX', "params" : {"sessionKey": sessionKey, "methodParams": {"gtTxBlockHash" : '000000009a4aed3e8ba7a978c6b50fea886fb496d66e696090a91d527200b002', "gtPageSize" : 1, "gtPageNumber" : 2}}}).encode('utf-8')
 
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
@@ -204,5 +208,8 @@ while True:
     processReqResp(sock, x13)
     processReqResp(sock, x14)
     processReqResp(sock, x15)
+    processReqResp(sock, x16)
+    processReqResp(sock, x17)
 
     exit()
+    
