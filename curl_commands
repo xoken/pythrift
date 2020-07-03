@@ -1,0 +1,58 @@
+# AUTHENTICATION
+curl -X POST -H "Content-type: application/json" -d '{ "username": "admin", "password": "NjI0MjE4Mjk5Mzc0MDEyMTkxOA=="}' -k 'https://127.0.0.1:9091/v1/auth'
+
+# CHAIN_INFO
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/chain/info'
+
+# HASH->BLOCK
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/block/hash/00000000d1145790a8694403d4063f323d499e655c83426834d4ce2f8dd4a2ee'
+
+# [HASH]->[BLOCK]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/block/hashes/?hash=000000000000000002af2a6de04d4a1a73973827eae348fe4d3f4d05610ff968&hash=000000000000000007fc734cbf1fc04c59cf7ecb6af0707fd5cf5b8d46dc4c75'
+
+# HEIGHT->BLOCK
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/block/height/10'
+
+# [HEIGHT]->[BLOCK]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/block/heights/?height=1&height=2&height=3'
+
+# TXID->RAWTX
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/rawtransaction/3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
+
+# TXID->TX
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/transaction/3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
+
+# [TXID]->[RAWTX]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/rawtransactions/?id=3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac&id=6536d30384be74df8f7e42881fea1224f7d2d40cd283328fdd6be1e07a31c6a6'
+
+# [TXID]->[TX]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/transactions/?id=3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac&id=6536d30384be74df8f7e42881fea1224f7d2d40cd283328fdd6be1e07a31c6a6'
+
+# HASH->[TXID]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/block/txids/000000009a4aed3e8ba7a978c6b50fea886fb496d66e696090a91d527200b002/?pagenumber=2&pagesize=1'
+
+# OUTPOINT->SPEND_STATUS
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/transaction/920e20148b0cdf48d6abe5e70306c52708428615b3f39c24e2f83c21b1ae7eaa/index/0'
+
+# NAME->[OUTPOINT]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/allegory/\[h/?isProducer=True'
+
+# TXID->[MNODE]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/merklebranch/3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
+
+# ADDR->[OUTPUT]
+
+# [ADDR]->[OUTPUT]
+
+# SCRIPTHASH->[OUTPUT]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/scripthash/c6eb7edbcaa22415125dcd82cc4db664c41dc544627647a5199e6f1c1fb09ef4/?pagesize=2'
+
+
+# [SCRIPTHASH]->[OUTPUT]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/scripthashes/?scripthash=c6eb7edbcaa22415125dcd82cc4db664c41dc544627647a5199e6f1c1fb09ef4&scripthash=57d291c8a47c7c0c861c4800aeb3d1af6227060ddec55bc58ce26059c4385f19'
+
+
+# RELAY_TX
+curl -X POST -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -H "Content-type: application/json" -d '{ "rTx": "H4sIAAAAAAACA2NkYGBg+nv/4u8f7LrTHcL8FtlyKK34HBt0KyKh/FiCTMntjulT/7IAFXW5G7gwKSSc+rhg4hpBqQOWZ/XXR1XcC+Uyb0z70HbcwP7pfR6pq2pMCnkanHW7eY99b9zxh3WhSEs9O5OtwpOzIUe+bo4/83zVrGuMjiwLUyz1j8wP+W/Btk2j1qMqXO/1Lv0qL/603sMXJ3088qSil6f/nuPaQ75OPlO3aPNp7ew43P/sWfuELZKdWnuf7F4v+B8ILFbJf8mMnVy7Jb2g9ebf6/8MZmqzbs1zTDf4u+Qhy4xzgQxwJ8vNyJPdecjL0LDUp7I6vbN5ifNPY5d87fWRSizh/0OynjApuFbdDazZXNj9/+CxCVbFWfODXRSNhTtu7+xfbbZ9yvN7flRyMhsDFExkyOJ3zMlJTc8vqtQHMgISK31qWxgYGyWiWxmaGBiagQRjYzNDRkR+dmpegFFARnF+bmppUaZhI0iKCZuUUVMzWB8zNkljifRmRpAsCzZZE4kMByd+sMvEV4qsnO7IsO7ddC+FsysXfXUt8OLa6n+n3YGXGSZfKxxS6vLm4Ke+Wzzsae/9NoncE3CluTxIDgBSJZnLqgIAAA=="}' -k 'https://127.0.0.1:9091/v1/relaytx'
+
+# PS_ALLEGORY_TX
