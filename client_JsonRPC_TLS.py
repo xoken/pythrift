@@ -183,7 +183,7 @@ while True:
     
     x16 = json.dumps({"id": 16, "jsonrpc" : "2.0",  "method": 'CHAIN_INFO', "params": {"sessionKey": sessionKey}}).encode('utf-8')
     
-    x17 = json.dumps({"id": 17, "jsonrpc" : "2.0",  "method" : 'TXID->TX', "params" : {"sessionKey": sessionKey, "methodParams": {"gtTxBlockHash" : '000000009a4aed3e8ba7a978c6b50fea886fb496d66e696090a91d527200b002', "gtPageSize" : 1, "gtPageNumber" : 2}}}).encode('utf-8')
+    x17 = json.dumps({"id": 17, "jsonrpc" : "2.0",  "method" : 'HASH->[TXID]', "params" : {"sessionKey": sessionKey, "methodParams": {"gtTxBlockHash" : '000000009a4aed3e8ba7a978c6b50fea886fb496d66e696090a91d527200b002', "gtPageSize" : 1, "gtPageNumber" : 2}}}).encode('utf-8')
 
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
