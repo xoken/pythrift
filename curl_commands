@@ -41,8 +41,10 @@ curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e48823
 curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/merklebranch/3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
 
 # ADDR->[OUTPUT]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/address/1KWj3Jk8xvS6fDdhQBsfmerscSGsS6CMiS/?pagesize=2'
 
 # [ADDR]->[OUTPUT]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/addresses/?address=1KWj3Jk8xvS6fDdhQBsfmerscSGsS6CMiS&address=13sU7VmtNTyw3K5fA6Aei48kxmCdvtGEWD/?pagesize=5'
 
 # SCRIPTHASH->[OUTPUT]
 curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/scripthash/c6eb7edbcaa22415125dcd82cc4db664c41dc544627647a5199e6f1c1fb09ef4/?pagesize=2'
