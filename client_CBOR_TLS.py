@@ -43,7 +43,9 @@ def processReqResp(s, payload):
     print("-----------------------------------------\n")
 
 def sendRequest(s, payload):
-    s.sendall(payload)
+    ln = len (payload)
+    prefix = (ln).to_bytes(4, byteorder='big')
+    s.sendall(prefix + payload)
 
 
 def recvResponse(s):

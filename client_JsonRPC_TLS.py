@@ -63,7 +63,9 @@ def processReqResp(s, payload):
     print("-----------------------------------------\n")
 
 def sendRequest(s, payload):
-    s.sendall(payload)
+    ln = len (payload)
+    prefix = (ln).to_bytes(4, byteorder='big')
+    s.sendall(prefix + payload)
 
 def recvResponse(s):
     raw = s.recv()
@@ -205,4 +207,7 @@ while True:
     processReqResp(sock, x14)
     processReqResp(sock, x15)
 
+    print("Done all APIs, keeping connection open for 10 secs.")
+    time.sleep(10)
+    print("Bye.")
     exit()
