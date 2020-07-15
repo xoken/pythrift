@@ -41,17 +41,29 @@ curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e48823
 curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/merklebranch/3e7861a8f18df990bf3b074718018cf7a1e7f32447bbf13ffc93327b7bf608ac'
 
 # ADDR->[OUTPUT]
-curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/address/1KWj3Jk8xvS6fDdhQBsfmerscSGsS6CMiS/?pagesize=2'
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/address/1KWj3Jk8xvS6fDdhQBsfmerscSGsS6CMiS/outputs/?pagesize=2'
 
 # [ADDR]->[OUTPUT]
-curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/addresses/?address=1KWj3Jk8xvS6fDdhQBsfmerscSGsS6CMiS&address=13sU7VmtNTyw3K5fA6Aei48kxmCdvtGEWD/?pagesize=5'
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/addresses/outputs/?address=1KWj3Jk8xvS6fDdhQBsfmerscSGsS6CMiS&address=13sU7VmtNTyw3K5fA6Aei48kxmCdvtGEWD/?pagesize=5'
 
 # SCRIPTHASH->[OUTPUT]
-curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/scripthash/c6eb7edbcaa22415125dcd82cc4db664c41dc544627647a5199e6f1c1fb09ef4/?pagesize=2'
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/scripthash/c6eb7edbcaa22415125dcd82cc4db664c41dc544627647a5199e6f1c1fb09ef4/outputs/?pagesize=2'
 
 
 # [SCRIPTHASH]->[OUTPUT]
-curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/scripthashes/?scripthash=c6eb7edbcaa22415125dcd82cc4db664c41dc544627647a5199e6f1c1fb09ef4&scripthash=57d291c8a47c7c0c861c4800aeb3d1af6227060ddec55bc58ce26059c4385f19'
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/scripthashes/outputs/?scripthash=c6eb7edbcaa22415125dcd82cc4db664c41dc544627647a5199e6f1c1fb09ef4&scripthash=57d291c8a47c7c0c861c4800aeb3d1af6227060ddec55bc58ce26059c4385f19'
+
+# ADDR->[UTXO]
+curl -X GET -H "Authorization: Bearer 758d0e9f8c69b8c76411f85fd46510860d235d4736b82ae9439f332b7a9c47aa" -k 'https://127.0.0.1:9091/v1/address/1AyAQ9nmeJnAsjpVtPefbDd7oyVitaAKik/utxos/?pagesize=2'
+
+# [ADDR]->[UTXO]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/addresses/utxos/?address=1KWj3Jk8xvS6fDdhQBsfmerscSGsS6CMiS&address=13sU7VmtNTyw3K5fA6Aei48kxmCdvtGEWD/?pagesize=5'
+
+# SCRIPTHASH->[UTXO]
+curl -X GET -H "Authorization: Bearer 758d0e9f8c69b8c76411f85fd46510860d235d4736b82ae9439f332b7a9c47aa" -k 'https://127.0.0.1:9091/v1/scripthash/57d291c8a47c7c0c861c4800aeb3d1af6227060ddec55bc58ce26059c4385f19/utxos/?pagesize=2'
+
+# [SCRIPTHASH]->[UTXO]
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/scripthashes/utxos/?scripthash=c6eb7edbcaa22415125dcd82cc4db664c41dc544627647a5199e6f1c1fb09ef4&scripthash=57d291c8a47c7c0c861c4800aeb3d1af6227060ddec55bc58ce26059c4385f19'
 
 
 # RELAY_TX
