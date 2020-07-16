@@ -154,7 +154,7 @@ while True:
                                              "pageSize": 5
                                              }}}).encode('utf-8')
 
-    x10 = json.dumps({"id": 10, "jsonrpc" : "2.0",  "method" : 'SCRIPTHASH->[OUTPUT]', "params" : {"sessionKey": sessionKey, "methodParams": {"scriptHash" : '8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67', "gaScriptHashPageSize" : 2}}}).encode('utf-8')
+    x10 = json.dumps({"id": 10, "jsonrpc" : "2.0",  "method" : 'SCRIPTHASH->[OUTPUT]', "params" : {"sessionKey": sessionKey, "methodParams": {"scriptHash" : '8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67', "pageSize" : 2}}}).encode('utf-8')
 
     x11 = json.dumps({"id" : 11, "jsonrpc" : "2.0",  "method" : '[SCRIPTHASH]->[OUTPUT]', "params" : {
                                             "sessionKey": sessionKey,
