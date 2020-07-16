@@ -1,8 +1,14 @@
 # AUTHENTICATION
 curl -X POST -H "Content-type: application/json" -d '{ "username": "admin", "password": "NjI0MjE4Mjk5Mzc0MDEyMTkxOA=="}' -k 'https://127.0.0.1:9091/v1/auth'
 
+# ADD_USER
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece"  -H "Content-type: application/json" -d '{"username" : "ReadUser", "firstName" : "Read", "lastName" : "User", "email" : "read@user.com"}' -k 'https://127.0.0.1:9091/v1/add/user'
+
 # CHAIN_INFO
 curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/chain/info'
+
+# CHAIN_HEADERS
+curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/chain/headers/?startBlockHeight=1000&pagesize=10'
 
 # HASH->BLOCK
 curl -X GET -H "Authorization: Bearer 8cf11a8cb97b0e002b31197c5808d13e3b18e488234a61946690668db5c5fece" -k 'https://127.0.0.1:9091/v1/block/hash/00000000d1145790a8694403d4063f323d499e655c83426834d4ce2f8dd4a2ee'

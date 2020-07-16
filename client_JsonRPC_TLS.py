@@ -185,7 +185,11 @@ while True:
     
     x16 = json.dumps({"id": 16, "jsonrpc" : "2.0",  "method": 'CHAIN_INFO', "params": {"sessionKey": sessionKey}}).encode('utf-8')
     
-    x17 = json.dumps({"id": 17, "jsonrpc" : "2.0",  "method" : 'HASH->[TXID]', "params" : {"sessionKey": sessionKey, "methodParams": {"gtTxBlockHash" : '000000009a4aed3e8ba7a978c6b50fea886fb496d66e696090a91d527200b002', "gtPageSize" : 1, "gtPageNumber" : 2}}}).encode('utf-8')
+    x17 = json.dumps({"id": 17, "jsonrpc" : "2.0",  "method" : 'CHAIN_HEADERS', "params" : {"sessionKey": sessionKey, "methodParams": {"startBlockHeight" : '25000', "pageSize" : 100}}}).encode('utf-8')
+
+    x18 = json.dumps({"id": 18, "jsonrpc" : "2.0",  "method" : 'HASH->[TXID]', "params" : {"sessionKey": sessionKey, "methodParams": {"gtTxBlockHash" : '000000009a4aed3e8ba7a978c6b50fea886fb496d66e696090a91d527200b002', "gtPageSize" : 1, "gtPageNumber" : 2}}}).encode('utf-8')
+
+    x19 = json.dumps({"id": 19, "jsonrpc" : "2.0",  "method" : 'ADD_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"username" : 'ReadUser1', "firstName" : "Read", "lastName" : "User", "email" : "read@user.com"}}}).encode('utf-8')
 
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
@@ -212,6 +216,8 @@ while True:
     processReqResp(sock, x15)
     processReqResp(sock, x16)
     processReqResp(sock, x17)
+    processReqResp(sock, x18)
+    processReqResp(sock, x19)
 
     print("Done all APIs, keeping connection open for 10 secs.")
     time.sleep(10)
