@@ -138,8 +138,8 @@ while True:
                                          '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'
                                         ]}}}).encode('utf-8')
 
-    x8 = json.dumps({"id": 8, "jsonrpc" : "2.0",  "method" : 'ADDR->[OUTPUT]', "params" : {"sessionKey": sessionKey, "methodParams": {"address" : '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', "gaPageSize" : 2}}}).encode('utf-8')
-
+    x8 = json.dumps({"id": 8, "jsonrpc" : "2.0",  "method" : 'ADDR->[OUTPUT]', "params" : {"sessionKey": sessionKey, "methodParams": {"address" : '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', "pageSize" : 2}}}).encode('utf-8')
+    
     x9 = json.dumps({"id" : 9, "jsonrpc" : "2.0",  "method" : '[ADDR]->[OUTPUT]', "params" : {
                                             "sessionKey": sessionKey,
                                             "methodParams": {"addresses" :
@@ -151,7 +151,7 @@ while True:
                                              '14gMdTsvq3Q6PnXK5jhn8KVgvWJnxzDV5m',
                                              '18E2ymquodpWHNhNzo8BC8d6QDwJNsEaYV',
                                              '1A6NvRKPsswAX8wwPKY4Ti5FBeNCpne1NC'],
-                                             "gasPageSize": 5, "lastNominalTxIndex" : 121129000000003
+                                             "pageSize": 5
                                              }}}).encode('utf-8')
 
     x10 = json.dumps({"id": 10, "jsonrpc" : "2.0",  "method" : 'SCRIPTHASH->[OUTPUT]', "params" : {"sessionKey": sessionKey, "methodParams": {"scriptHash" : '8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67', "gaScriptHashPageSize" : 2}}}).encode('utf-8')
@@ -169,7 +169,7 @@ while True:
                                              'f8f3ff7bb10bc246a0c657c8f79c47db7588b086072e11d821489f461b41b2f5',
                                              '18401302386e56dd7309aa10fb89a7db1bbe77bc6bff5fda8619a9b11a809497',
                                              '81dcf5b60b87b03c66ab530fed899c656c6a3b03f45352ad5f949bd9bfc328e7'],
-                                             "gasScriptHashPageSize" : 5, "lastNominalTxIndex" : 2086000000001}}}).encode('utf-8')
+                                             "pageSize" : 5}}}).encode('utf-8')
 
     x12 = json.dumps({"id" : 12, "jsonrpc" : "2.0",  "method": 'TXID->[MNODE]', "params" : { "sessionKey": sessionKey, "methodParams": {"txid": '54c693db802d83596e3a0cdec1f99dc01af246ca51b82adaad2f41e0a8fb2131'}}}).encode('utf-8')
 
@@ -186,6 +186,39 @@ while True:
     x16 = json.dumps({"id": 16, "jsonrpc" : "2.0",  "method": 'CHAIN_INFO', "params": {"sessionKey": sessionKey}}).encode('utf-8')
     
     x17 = json.dumps({"id": 17, "jsonrpc" : "2.0",  "method" : 'HASH->[TXID]', "params" : {"sessionKey": sessionKey, "methodParams": {"hash" : '000000009a4aed3e8ba7a978c6b50fea886fb496d66e696090a91d527200b002', "gtPageSize" : 1, "gtPageNumber" : 2}}}).encode('utf-8')
+
+    x18 = json.dumps({"id": 18, "jsonrpc" : "2.0",  "method" : 'ADDR->[UTXO]', "params" : {"sessionKey": sessionKey, "methodParams": {"address" : '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9', "pageSize" : 2}}}).encode('utf-8')
+
+    x19 = json.dumps({"id" : 19, "jsonrpc" : "2.0",  "method" : '[ADDR]->[UTXO]', "params" : {
+                                            "sessionKey": sessionKey,
+                                            "methodParams": {"addresses" :
+                                            ['14QdCax3sR6ZVMo6smMyUNzN5Fx9zA8Sjj',
+                                             '17VaRoTC8dkb6vHyE37EPZByzpKvK1u2ZU',
+                                             '1NGw8LYZ93g2RiZpiP4eCniU4YmQjH1tP9',
+                                             '1EHM42QUBLSA9AdJGH6XmAMYSnh7rzTPuR',
+                                             '1JbmUfm9fpu5o9BfCATRhbp4NiDR5D3UBX',
+                                             '14gMdTsvq3Q6PnXK5jhn8KVgvWJnxzDV5m',
+                                             '18E2ymquodpWHNhNzo8BC8d6QDwJNsEaYV',
+                                             '1A6NvRKPsswAX8wwPKY4Ti5FBeNCpne1NC'],
+                                             "pageSize": 5
+                                             }}}).encode('utf-8')
+
+    x20 = json.dumps({"id": 20, "jsonrpc" : "2.0",  "method" : 'SCRIPTHASH->[UTXO]', "params" : {"sessionKey": sessionKey, "methodParams": {"scriptHash" : '8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67', "pageSize" : 2}}}).encode('utf-8')
+
+    x21 = json.dumps({"id" : 21, "jsonrpc" : "2.0",  "method" : '[SCRIPTHASH]->[UTXO]', "params" : {
+                                            "sessionKey": sessionKey,
+                                            "methodParams": {"scriptHashes" :
+                                            ['8ad0ed1cf403f3d4f589b6b05195d7932425620b0b42e7bfce0295df6f1e3c67',
+                                             '1fb931ea41f204ce837f63dcffdec09720c8c8d285196050d32fd4e5dc2915be',
+                                             'a77c108d9b34194bf6e83145a86e867b74cefa959d16d363b0bee31aa1799160',
+                                             '41ae9fa8b864c24467cc8d9bd18c04bbcaa98086dfea8de3366e901b1d5f2fd3',
+                                             '5afb578976d3bbfd470f906586cb33abf64830563e0c43255b34a421665e04f7',
+                                             '050d94209dfbc9150fad697c37defc83089b138105d23d32e3e6c32eb78f4429',
+                                             '946f050043939a8e3d4ccf3ef393d0d8832141dcbdcb9c2363ac78cc3649d080',
+                                             'f8f3ff7bb10bc246a0c657c8f79c47db7588b086072e11d821489f461b41b2f5',
+                                             '18401302386e56dd7309aa10fb89a7db1bbe77bc6bff5fda8619a9b11a809497',
+                                             '81dcf5b60b87b03c66ab530fed899c656c6a3b03f45352ad5f949bd9bfc328e7'],
+                                             "pageSize" : 5}}}).encode('utf-8')
 
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
@@ -212,6 +245,10 @@ while True:
     processReqResp(sock, x15)
     processReqResp(sock, x16)
     processReqResp(sock, x17)
+    processReqResp(sock, x18)
+    processReqResp(sock, x19)
+    processReqResp(sock, x20)
+    processReqResp(sock, x21)
 
     print("Done all APIs, keeping connection open for 10 secs.")
     time.sleep(10)
