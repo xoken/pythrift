@@ -223,6 +223,14 @@ while True:
     x22 = json.dumps({"id": 22, "jsonrpc" : "2.0",  "method" : 'CHAIN_HEADERS', "params" : {"sessionKey": sessionKey, "methodParams": {"startBlockHeight" : '25000', "pageSize" : 100}}}).encode('utf-8')
 
     x23 = json.dumps({"id": 23, "jsonrpc" : "2.0",  "method" : 'ADD_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"username" : 'ReadUser1', "firstName" : "Read", "lastName" : "User", "email" : "read@user.com"}}}).encode('utf-8')
+    
+    x24 = json.dumps({"id": 24, "jsonrpc" : "2.0",  "method" : 'UPDATE_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"updateUsername" : 'ReadUser1', "updateData" : {"firstName" : "UpdatedRead", "email":"updated@email.com", "apiQuota":19900}}}}).encode('utf-8')
+    
+    x25 = json.dumps({"id": 25, "jsonrpc" : "2.0",  "method" : 'USERNAME->USER', "params" : {"sessionKey": sessionKey, "methodParams": {"getUsername" : 'ReadUser1'}}}).encode('utf-8')
+    
+    x26 = json.dumps({"id": 26, "jsonrpc" : "2.0",  "method" : 'DELETE_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"deleteUsername" : 'ReadUser1'}}}).encode('utf-8')
+    
+    x27 = json.dumps({"id": 27, "jsonrpc" : "2.0",  "method" : 'USER', "params" : {"sessionKey": sessionKey}}).encode('utf-8')
 
     c = Bitcoin()
     priv = sha256('allegory allpay test dummy seed')
@@ -255,6 +263,10 @@ while True:
     processReqResp(sock, x21)
     processReqResp(sock, x22)
     processReqResp(sock, x23)
+    processReqResp(sock, x24)
+    processReqResp(sock, x25)
+    processReqResp(sock, x26)
+    processReqResp(sock, x27)
 
     print("Done all APIs, keeping connection open for 10 secs.")
     time.sleep(10)
