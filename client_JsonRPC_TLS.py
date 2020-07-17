@@ -224,11 +224,11 @@ while True:
 
     x23 = json.dumps({"id": 23, "jsonrpc" : "2.0",  "method" : 'ADD_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"username" : 'ReadUser1', "firstName" : "Read", "lastName" : "User", "email" : "read@user.com"}}}).encode('utf-8')
     
-    x24 = json.dumps({"id": 24, "jsonrpc" : "2.0",  "method" : 'UPDATE_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"updateUsername" : 'ReadUser1', "updateData" : {"firstName" : "UpdatedRead", "email":"updated@email.com", "apiQuota":19900}}}}).encode('utf-8')
+    x24 = json.dumps({"id": 24, "jsonrpc" : "2.0",  "method" : 'UPDATE_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"username" : 'ReadUser1', "updateData" : {"firstName" : "UpdatedRead", "email":"updated@email.com", "apiQuota":19900}}}}).encode('utf-8')
     
-    x25 = json.dumps({"id": 25, "jsonrpc" : "2.0",  "method" : 'USERNAME->USER', "params" : {"sessionKey": sessionKey, "methodParams": {"getUsername" : 'ReadUser1'}}}).encode('utf-8')
+    x25 = json.dumps({"id": 25, "jsonrpc" : "2.0",  "method" : 'USERNAME->USER', "params" : {"sessionKey": sessionKey, "methodParams": {"username" : 'ReadUser1'}}}).encode('utf-8')
     
-    x26 = json.dumps({"id": 26, "jsonrpc" : "2.0",  "method" : 'DELETE_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"deleteUsername" : 'ReadUser1'}}}).encode('utf-8')
+    x26 = json.dumps({"id": 26, "jsonrpc" : "2.0",  "method" : 'DELETE_USER', "params" : {"sessionKey": sessionKey, "methodParams": {"username" : 'ReadUser1'}}}).encode('utf-8')
     
     x27 = json.dumps({"id": 27, "jsonrpc" : "2.0",  "method" : 'USER', "params" : {"sessionKey": sessionKey}}).encode('utf-8')
 
