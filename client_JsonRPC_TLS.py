@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import gzip
 import zlib
 import base64
 import sys
@@ -232,13 +233,6 @@ while True:
     
     x27 = json.dumps({"id": 27, "jsonrpc" : "2.0",  "method" : 'USER', "params" : {"sessionKey": sessionKey}}).encode('utf-8')
 
-    c = Bitcoin()
-    priv = sha256('allegory allpay test dummy seed')
-    pub = c.privtopub(priv)
-    addr = c.pubtoaddr(pub)
-
-
-    
     processReqResp(sock, x0)
     processReqResp(sock, x1)
     processReqResp(sock, x2)
@@ -267,6 +261,94 @@ while True:
     processReqResp(sock, x25)
     processReqResp(sock, x26)
     processReqResp(sock, x27)
+ 
+#############################
+# Allegory partially sign Txn
+# Relay Txn
+#############################
+
+    c = Bitcoin()
+    priv = sha256('allegory allpay test dummy seed')
+    pub = c.privtopub(priv)
+    addr = c.pubtoaddr(pub)
+
+    inputsD = \
+        [({"opTxHash": 'dee533d8d0ac0b1f0ccb49b80f075fee63802a9fab9114a90e9c5ae866695731', "opIndex": 0}, 87654543)]
+    inputs = \
+        [{'output': 'e4714990d74d9636c2efdb98a5e7dc7c1c516a43572638641eb67dda9df43015:0', 'value': 1000000},
+         {'output': '51ce9804e1a4fd3067416eb5052b9930fed7fdd9857067b47d935d69f41faa38:0', 'value': 1000000}]
+    outs = [{'value': 1000000,
+             'address': '18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9'},
+            {'value': 2222,
+             'address': '1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL'}]
+    allegory = (0, 1, [],
+                (0, (0, 0),
+                 (0, (0, 1), [(0, "XokenP2P", "someuri1")]),
+                 [(0, (0, 2), [(0, "XokenP2P", "someuri2")])],
+                 [((0, (0, 3), [(0, "XokenP2P", "someuri3")]), 90), (1, (0, (0, 4), [(0, "XokenP2P", "someuri4")]), 91)]))
+    data = dumps(allegory)
+    ss = frame_op_return(data).hex()
+    op_return = [{'script': ss, 'value': 0}]
+    outs = op_return + outs
+
+    x28 = json.dumps(
+        {
+            "id": 17, 
+            "jsonrpc": "2.0",  
+            "method": 'PS_ALLEGORY_TX', 
+            "params": {
+                "sessionKey": sessionKey, 
+                "methodParams": {
+                    "paymentInputs": inputsD,
+                    "name": ([90,91,82,130], False), 
+                    "outputOwner": "18TLpiL4UFwmQY8nnnjmh2um11dFzZnBd9", 
+                    "outputChange": "1GRVVRz75WfU7htxMWDm9i1tnZP2KFqRzL"
+                }
+            }
+        }).encode('utf-8')
+
+    print("JSON Request: ", x28)
+    sendRequest(sock, x28)
+    print("\n\n")
+    respPsaTx1 = recvResponse(sock)
+    print("\n\nRaw JSON Response: ", respPsaTx1)
+
+    psaTx = gzip.decompress(base64.b64decode((json.loads(respPsaTx1)["result"]["psaTx"].encode('utf-8'))))
+    print("\n\nPartially signed Allegory Tx: ", psaTx)
+
+    fsaTx = c.sign(json.loads(psaTx), 0, priv)
+    print('\n\nFully signed Allegory Tx: ', fsaTx)
+
+    serFsaTxHex = serialize(fsaTx)
+    print("\n\nSerialized fully signed Allegory Tx (Hex): ", serFsaTxHex)
+    serFsaTx = bytes.fromhex(serFsaTxHex)
+    print("\n\nSerialized fully signed Allegory Tx: ", serFsaTx)
+
+    hashedTx1 = txhash(serFsaTxHex) 
+    print("\n\nHash of fully signed Allegory Tx: ", hashedTx1)
+
+    b64GzippedFsaTx = (base64.b64encode(gzip.compress(serFsaTx))).decode('utf-8')
+    print("\n\nBase64-encoded and GZipped fully signed Allegory Tx: ", b64GzippedFsaTx)
+
+    x29 = json.dumps(
+        {
+            "id": 14, 
+            "jsonrpc" : "2.0",  
+            "method": 'RELAY_TX', 
+            "params": {
+                "sessionKey": sessionKey, 
+                "methodParams": {
+                    "rawTx" : b64GzippedFsaTx 
+                }
+            }
+        }).encode('utf-8')
+    
+    print("\n\nJSON Request: ", x29)
+    sendRequest(sock, x29)
+    print("\n\n")
+    respRelayTx1 = recvResponse(sock)
+
+#############################
 
     print("Done all APIs, keeping connection open for 10 secs.")
     time.sleep(10)
