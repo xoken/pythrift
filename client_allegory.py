@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import gzip
 import zlib
 import base64
 import sys
@@ -146,7 +145,7 @@ while True:
     respPsaTx1 = recvResponse(sock)
     print("\n\nRaw JSON Response: ", respPsaTx1)
 
-    psaTx = gzip.decompress(base64.b64decode((json.loads(respPsaTx1)["result"]["psaTx"].encode('utf-8'))))
+    psaTx = base64.b64decode(json.loads(respPsaTx1)["result"]["psaTx"].encode('utf-8'))
     print("\n\nPartially signed Allegory Tx: ", psaTx)
 
     fsaTx = c.sign(json.loads(psaTx), 0, priv)
@@ -160,8 +159,8 @@ while True:
     hashedTx1 = txhash(serFsaTxHex) 
     print("\n\nHash of fully signed Allegory Tx: ", hashedTx1)
 
-    b64GzippedFsaTx = (base64.b64encode(gzip.compress(serFsaTx))).decode('utf-8')
-    print("\n\nBase64-encoded and GZipped fully signed Allegory Tx: ", b64GzippedFsaTx)
+    b64FsaTx = (base64.b64encode(serFsaTx)).decode('utf-8')
+    print("\n\nBase64-encoded fully signed Allegory Tx: ", b64FsaTx)
 
     x1 = json.dumps(
         {
@@ -171,7 +170,7 @@ while True:
             "params": {
                 "sessionKey": sessionKey, 
                 "methodParams": {
-                    "rawTx" : b64GzippedFsaTx 
+                    "rawTx" : b64FsaTx
                 }
             }
         }).encode('utf-8')
