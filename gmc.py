@@ -18,25 +18,22 @@ import configparser
 import hashlib
 import time
 import binascii
+    
+max_nonce = 100000    
 
-VERSION=2
-
-def sha256(s):
-	hash_object = hashlib.sha256(bytes(s,'utf-8'))
-	hex_dig = hash_object.hexdigest()
-	return hex_dig
-
-def hash256(s):
-    return sha256(sha256(s))
+def dsha(s):
+    s_bytes = bytes.fromhex(s)
+    hashed = hashlib.sha256(hashlib.sha256(s_bytes).digest()).digest()
+    return bytes.hex(hashed)
     
 def merkle_root_from_merkle_proof(coinbase_hash, merkle_proof):
     merkleRootBytes = coinbase_hash
     print('Merkle Root Bytes Init: ',merkleRootBytes)
     for mp in merkle_proof:
-        merkleRootBytes = hash256(merkleRootBytes + mp)
+        merkleRootBytes = dsha(merkleRootBytes + invert_endianness(mp))
         print('Merkle Root Bytes: ',merkleRootBytes, "; MerkleProof ",mp)
     print(merkleRootBytes)
-    return (merkleRootBytes)
+    return invert_endianness(merkleRootBytes)
 
 def getTarget(bits):
     print(type(bits))
@@ -62,42 +59,17 @@ def get_block_header(ver,merkle_root, previous_hash, timestamp, bits, nonce):
     header_bin = header_hex.decode()
     return header_bin
 
-def hashIt(firstTxHash, secondTxHash):
-    unhex_reverse_first = binascii.unhexlify(firstTxHash)[::-1]
-    unhex_reverse_second = binascii.unhexlify(secondTxHash)[::-1]
-    concat_inputs = unhex_reverse_first+unhex_reverse_second
-    first_hash_inputs = hashlib.sha256(concat_inputs).digest()
-    final_hash_inputs = hashlib.sha256(first_hash_inputs).digest()
-    return binascii.hexlify(final_hash_inputs[::-1])
-
-max_nonce = 20000
-
 def proof_of_work(header, difficulty_bits):
     target = getTarget(difficulty_bits)
     print(target)
     for nonce in range(max_nonce):
-        hash_result = hash256(header + hexint(nonce))
+        hash_result = invert_endianness(dsha(header + hexint(nonce)))
         if int(hash_result, 16) < target:
             print("Success with nonce {}".format(nonce))
             print("Hash is {}".format(hash_result))
             return (hash_result,nonce)
     print("Failed to find nonce")
     return nonce
-
-def getSessionKey(user, pswd, sock):
-    authRq = json.dumps({"id":  0, "jsonrpc" : "2.0", "method": 'AUTHENTICATE', "params" : {"username" : user, "password": pswd}}).encode('utf-8')
-    sendRequest(sock, authRq)
-    rawResp = sock.recv()
-    prefix = rawResp[:4]
-    length = int.from_bytes(prefix, byteorder='big')
-    full = rawResp[4:]
-    cumlen = len(rawResp) - 4
-    while(length > cumlen):
-        curr = sock.recv()
-        cumlen = cumlen + len(curr)
-        full = full + curr
-    respObj = json.loads(full);
-    return respObj["result"]["auth"]["sessionKey"]
 
 def processReqResp(s, payload):
     sendRequest(s, payload)
@@ -183,7 +155,7 @@ def main():
     	version_hex = hexify(version,'<L')
     
     	cbase = res['coinbase']
-    	merkleRoot = merkle_root_from_merkle_proof(hash256(cbase),mp)
+    	merkleRoot = merkle_root_from_merkle_proof(dsha(cbase),mp)
     	height = res['height']
     	num_tx = res['num_tx']
     	phh=get_block_header(version,merkleRoot,prevhash,res['time'],res['nBits'],-1)
