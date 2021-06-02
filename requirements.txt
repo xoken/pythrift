@@ -5,4 +5,4 @@ cryptos==1.36
 idna==2.9
 requests==2.23.0
 simplejson==3.17.0
-urllib3==1.25.9
+urllib3==1.26.5
